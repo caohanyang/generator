@@ -18,15 +18,20 @@ const dbUrl = `mongodb://${serverNames.mongoServerName}:27017/wat_storage`;
 database.write_base_scenario(dbUrl, scenario_base, (baseId) => {
 
 	console.log(baseId);
-	// 2. generate candidate for each action
-	var tests = [];
-	for (var i = 0; i < scenario_base.actions.length; ++i) {
-		tests.push(gen_candi_actions(baseId, scenario_base.actions[i], i));
+	// 2. generate action for each base action
+    for (var i = 0; i < scenario_base.actions.length; ++i) {
+		database.write_base_action(dbUrl, scenario_base.actions[i]);
 	}
 
-	Promise.all(tests).then(function() {
-		console.log("all the tests were executed");
-	});
+	// 3. generate candidate for each action
+	// var tests = [];
+	// for (var i = 0; i < scenario_base.actions.length; ++i) {
+	// 	tests.push(gen_candi_actions(baseId, scenario_base.actions[i], i));
+	// }
+
+	// Promise.all(tests).then(function() {
+	// 	console.log("all the tests were executed");
+	// });
 
 });
 

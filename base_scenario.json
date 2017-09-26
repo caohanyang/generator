@@ -12,6 +12,10 @@
     "selector": "#menu > UL:nth-child(7) > LI:nth-child(5) > A:nth-child(1)"
   },
   {
+    "type": "ClickAction",
+    "selector": "#menu > UL:nth-child(7) > LI:nth-child(5) > A:nth-child(1)"
+  },
+  {
     "type": "BackAction"
   }
 ]

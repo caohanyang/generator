@@ -38,6 +38,42 @@ function write_base_scenario(dbUrl, scenario_base, callback) {
 	});
 }
 
+function write_base_action(dbUrl, action) {
+	winston.info(`Save base action in ${dbUrl}`);
+	MongoClient.connect(dbUrl)
+	.then(db => {
+		db.collection('action', (err, actionCollection) => {
+			if (err) {
+				winston.error(err);
+				db.close();
+			} else {
+
+				// create new action item
+				var actionItem = {};
+				actionItem.action = action;
+
+				// use findOneAndReplace to save unique action in action
+				actionCollection.findOneAndReplace({'action':action},actionItem,{upsert:true})
+					.then(()=> {
+						winston.info("Success to save base action");
+					}).catch(err => {
+						winston.error(err);
+					})
+
+			}
+		});
+
+        db.close();
+
+	}).catch(err => {
+		winston.info(err);
+	});
+}
+
+function existAction(db, value) {
+
+	
+};
 
 function write_noise_scenario(dbUrl, scenario_noise, cid, flag) {
 	winston.info(`Save noise scenario in ${dbUrl}`);
@@ -137,6 +173,7 @@ function read_candidate_collection(dbUrl, callback) {
 }
 
 module.exports.write_base_scenario=write_base_scenario;
+module.exports.write_base_action=write_base_action;
 module.exports.write_noise_scenario=write_noise_scenario;
 module.exports.write_candidate_action=write_candidate_action;
 module.exports.read_candidate_collection=read_candidate_collection;
