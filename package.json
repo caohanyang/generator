@@ -1,0 +1,21 @@
+{
+  "name": "generator",
+  "version": "1.0.0",
+  "description": "generate noise",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "assert": "^1.4.1",
+    "fs": "0.0.1-security",
+    "mongodb": "^2.2.31",
+    "nightmare": "^2.10.0",
+    "path": "^0.12.7",
+    "wat-action": "^1.0.4",
+    "winston": "^2.3.1",
+    "yargs": "^9.0.1"
+  }
+}
