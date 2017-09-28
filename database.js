@@ -96,14 +96,15 @@ function write_noise_scenario(dbUrl, scenario_noise, cid, flag) {
 				noiseCollection.save(noiseScenario)
 				    .then(()=> {
 						winston.info("Success to save noise scenario");
+						db.close();
 					}).catch(err => {
 						winston.error(err);
+						db.close();
 					})
 			}
 		});
 
-        db.close();
-
+       
 	}).catch(err => {
 		winston.info(err);
 	});

@@ -6,6 +6,7 @@ var crawl_action = require('./crawl_action.js');
 var fs = require('fs');
 const argv = require('yargs').argv;
 var database = require('./database.js');
+var asyncLoop = require('node-async-loop');
 
 const serverNames = {
 	mongoServerName : argv.mongo
@@ -13,30 +14,34 @@ const serverNames = {
 
 const dbUrl = `mongodb://${serverNames.mongoServerName}:27017/wat_storage`;
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  
 database.read_candidate_collection(dbUrl, (candi_array) => {
     var tests = [];
 
-    //generate 3 scenario for each candiate action
-    for (var i = 0; i < candi_array.length; i++) {
+    var i = 0;
+    function f() {
+        console.log( "start one candidate" );
         var candidate = candi_array[i];
-        // 1. generate TF
         var aid = candidate.aid;
-        var cid = candidate._id;
-        console.log(cid);
-        tests.push(gen_TF(candidate.action, aid, cid));
-        tests.push(gen_IO(candidate.action, aid, cid));
-        tests.push(gen_end(candidate.action, aid, cid));
+        var cid = candidate._id; 
         
+        gen_TF(candidate.action, aid, cid);
+        gen_IO(candidate.action, aid, cid);
+        gen_end(candidate.action, aid, cid);
+
+        i++;
+        if( i < candi_array.length ){
+            setTimeout( f, 100 );
+        }
     }
 
-    Promise.all(tests).then(function() {
-		console.log("all the tests were executed");
-	});
+    f(candi_array);
+    
 })
-
-
-
-
 
 function gen_TF(action, aid, cid){
 
@@ -52,7 +57,7 @@ function gen_TF(action, aid, cid){
     var scenario_noise = new wat_action.Scenario(JSON.parse(scenarioJson));
 
     database.write_noise_scenario(dbUrl, scenario_noise, cid, "TF")
-    
+   
 } 
 
 
@@ -69,11 +74,10 @@ function gen_IO(action, aid, cid){
       var scenario_noise = new wat_action.Scenario(JSON.parse(scenarioJson));
   
       database.write_noise_scenario(dbUrl, scenario_noise, cid, "IO")
-
-
+      
 } 
 
-function gen_end(action, aid, cid){
+function gen_end(action, aid, cid, callback){
     
        var scenario_base = new wat_action.Scenario(scenario_str);
        scenario_base.actions.splice(aid + 1,0, action);
@@ -85,8 +89,7 @@ function gen_end(action, aid, cid){
        var scenario_noise = new wat_action.Scenario(JSON.parse(scenarioJson));
    
        database.write_noise_scenario(dbUrl, scenario_noise, cid, "END")
- 
- 
+     
  } 
 
 

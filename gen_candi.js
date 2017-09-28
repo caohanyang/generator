@@ -40,8 +40,6 @@ database.write_base_scenario(dbUrl, scenario_base, (baseId) => {
 	});
 
 
-
-
 	// 3. generate candidate for each action
 	var tests = [];
 	for (var i = 0; i < scenario_base.actions.length; ++i) {
@@ -51,25 +49,6 @@ database.write_base_scenario(dbUrl, scenario_base, (baseId) => {
 	Promise.all(tests).then(function() {
 		console.log("all the tests were executed");
 	});
-
-	// var j = 0;
-	// asyncLoop(scenario_base.actions, function(action, next)
-	// {
-
-	// 	gen_candi_actions(baseId, j, ()=> {
-	// 		j++;
-	// 		next();
-	// 	})
-       
-	// }, function(err) {
-	// 	if (err) {
-	// 		console.log('Error: ' + err.message);
-	// 		return;
-	// 	}
-	
-	// 	console.log('Finished');
-	// });
-
 
 });
 
