@@ -77,6 +77,44 @@ function write_base_action(dbUrl, action, callback) {
 }
 
 
+function write_final_action(dbUrl, action, callback) {
+	// winston.info(`Save base action in ${dbUrl}`);
+	// MongoClient.connect(dbUrl)
+	// .then(db => {
+	// 	db.collection('action', (err, actionCollection) => {
+	// 		if (err) {
+	// 			winston.error(err);
+	// 			// db.close();
+	// 		} else {
+
+	// 			// create new action item
+	// 			var actionItem = {};
+	// 			actionItem.action = action;
+
+	// 			// use findOneAndReplace to save unique action in action
+	// 			actionCollection.findOneAndReplace({'action':action},actionItem,{upsert:true})
+	// 				.then((actionOne)=> {
+	// 					winston.info("Success to save base action");
+	// 					if (actionOne.value !== null) {
+	// 						callback(actionOne.value._id);
+	// 					} else {
+	// 						callback(actionOne.lastErrorObject.upserted)
+	// 					}
+
+	// 					db.close();
+	// 				}).catch(err => {
+	// 					winston.error(err);
+	// 				})
+
+	// 		}
+	// 	});
+        
+	// }).catch(err => {
+	// 	winston.info(err);
+	// });
+}
+
+
 function write_noise_scenario(dbUrl, scenario_noise, cid, flag) {
 	winston.info(`Save noise scenario in ${dbUrl}`);
 	MongoClient.connect(dbUrl)
@@ -230,8 +268,54 @@ function read_candidate_collection(dbUrl, callback) {
 	});
 }
 
+function read_result_collection(dbUrl, callback) {
+	winston.info(`Read candidate result in ${dbUrl}`);
+	MongoClient.connect(dbUrl)
+	.then(db => {
+		db.collection('candidate').aggregate([
+            {
+                $lookup: {
+                        from: "scenario",
+                        localField: "_id",
+                        foreignField: "cid",
+                        as: "scenario"
+                    }
+            },
+           
+             { $unwind : "$scenario" },
+             {
+                $lookup: {
+                        from: "run",
+                        localField: "scenario._id",
+                        foreignField: "sid",
+                        as: "run"
+                    }
+            },
+            { $unwind : "$run" },
+            { $group : { _id : "$_id",
+                         aid: { $addToSet: "$aid" },
+                         flag : { $push: "$scenario.flag" },
+                       result: { $push: "$run.isSuccess" }   
+              } }, 
+            { $unwind : "$aid" }			
+            ], function(err, result) {
+				callback(result);
+		
+				db.close();
+			});
+
+         
+
+	}).catch(err => {
+		winston.info(err);
+	});
+}
+
+
 module.exports.write_base_scenario=write_base_scenario;
 module.exports.write_base_action=write_base_action;
 module.exports.write_noise_scenario=write_noise_scenario;
 module.exports.write_candidate_action=write_candidate_action;
 module.exports.read_candidate_collection=read_candidate_collection;
+module.exports.read_result_collection=read_result_collection;
+module.exports.write_final_action=write_final_action;

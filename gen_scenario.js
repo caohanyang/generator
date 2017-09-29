@@ -14,10 +14,6 @@ const serverNames = {
 
 const dbUrl = `mongodb://${serverNames.mongoServerName}:27017/wat_storage`;
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
   
 database.read_candidate_collection(dbUrl, (candi_array) => {
     var tests = [];
