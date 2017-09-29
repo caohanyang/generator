@@ -92,10 +92,11 @@ function write_noise_scenario(dbUrl, scenario_noise, cid, flag) {
                 noiseScenario.cid = cid;
                 noiseScenario.flag = flag;
 				//set user id
+				// console.log(scenario_noise.actions);
 				noiseScenario.actions = scenario_noise.actions;
 				noiseCollection.save(noiseScenario)
 				    .then(()=> {
-						winston.info("Success to save noise scenario");
+						winston.info("Success to save noise scenario " + flag);
 						db.close();
 					}).catch(err => {
 						winston.error(err);

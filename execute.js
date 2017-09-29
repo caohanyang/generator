@@ -18,16 +18,36 @@ function getScenarios() {
 				winston.error(`Play Now Request Error : ${err}`);
 				db.close();
 			} else {
-				scenarioCollection.find().forEach(function(obj){ 
-					console.log(obj._id);							
+			
+				scenarioCollection.find().toArray()
+				.then(founds => {
+					var i = 0;
+					function f() {
+			 
+						var obj = founds[i];
+						console.log(obj._id);	
 
-					request('http://localhost:8091/playNow/'+obj._id, function (error, response, body) {
-						if (!error) {
-							console.log("body"+body);
+						request('http://localhost:8091/playNow/'+obj._id, function (error, response, body) {
+							if (!error) {
+								console.log("body"+body);
+							}
+						})
+				
+						i++;
+						if( i < founds.length ){
+							setTimeout( f, 1000 );
 						}
-					})
+					}
+				
+					f();
 
+					db.close();
+				}).catch(err => {
+					
+					db.close();
 				});
+
+
 			}
 		});
 
