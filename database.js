@@ -77,41 +77,59 @@ function write_base_action(dbUrl, action, callback) {
 }
 
 
-function write_final_action(dbUrl, action, callback) {
-	// winston.info(`Save base action in ${dbUrl}`);
-	// MongoClient.connect(dbUrl)
-	// .then(db => {
-	// 	db.collection('action', (err, actionCollection) => {
-	// 		if (err) {
-	// 			winston.error(err);
-	// 			// db.close();
-	// 		} else {
+function write_final_action(dbUrl, result) {
+	winston.info(`Save final result in ${dbUrl}`);
+	MongoClient.connect(dbUrl)
+	.then(db => {
+		db.collection('result', (err, finalCollection) => {
+			if (err) {
+				winston.error(err);
+				db.close();
+			} else {
 
-	// 			// create new action item
-	// 			var actionItem = {};
-	// 			actionItem.action = action;
+				// create new action item
+				var finalItem = {};
+				finalItem.aid = result.aid;
+				// finalItem.FPCA = 0;
+				// finalItem.TPCA_OUT = 0;
+				// finalItem.TPCA_IN_TS = 0;
+				// finalItem.TPCA_IN_TF = 0;
 
-	// 			// use findOneAndReplace to save unique action in action
-	// 			actionCollection.findOneAndReplace({'action':action},actionItem,{upsert:true})
-	// 				.then((actionOne)=> {
-	// 					winston.info("Success to save base action");
-	// 					if (actionOne.value !== null) {
-	// 						callback(actionOne.value._id);
-	// 					} else {
-	// 						callback(actionOne.lastErrorObject.upserted)
-	// 					}
+				// switch(result.type) {
+				// 	case "FPCA": finalItem.FPCA++; break;
+				// 	case "TPCA_OUT": finalItem.TPCA_OUT++; break;
+				// 	case "TPCA_IN_TS": finalItem.TPCA_IN_TS++; break;
+				// 	case "TPCA_IN_TF": finalItem.TPCA_IN_TF++; break;					     
+				// }
 
-	// 					db.close();
-	// 				}).catch(err => {
-	// 					winston.error(err);
-	// 				})
+				var newOne = null;
+				switch(result.type) {
+					case "FPCA": newOne = { $set: finalItem, $inc : { "FPCA" : 1,"TPCA_OUT" : 0,"TPCA_IN_TS" : 0, "TPCA_IN_TF" : 0 } }; break;
+					case "TPCA_OUT": newOne = { $set: finalItem, $inc : { "FPCA" : 0,"TPCA_OUT" : 1,"TPCA_IN_TS" : 0, "TPCA_IN_TF" : 0 } }; break;
+					case "TPCA_IN_TS": newOne = { $set: finalItem, $inc : { "FPCA" : 0,"TPCA_OUT" : 0,"TPCA_IN_TS" : 1, "TPCA_IN_TF" : 0 } }; break;
+					case "TPCA_IN_TF": newOne = { $set: finalItem, $inc : { "FPCA" : 0,"TPCA_OUT" : 0,"TPCA_IN_TS" : 0, "TPCA_IN_TF" : 1 } }; break;					     
+				}
 
-	// 		}
-	// 	});
+				console.log(newOne);
+				// use findOneAndReplace to save unique action in action
+				finalCollection.findOneAndReplace(
+					{'aid':result.aid},
+					newOne,
+					{upsert:true})
+					.then((actionOne)=> {
+						winston.info("Success to save final action");
+						db.close();
+					}).catch(err => {
+						winston.error(err);
+						db.close();
+					})
+
+			}
+		});
         
-	// }).catch(err => {
-	// 	winston.info(err);
-	// });
+	}).catch(err => {
+		winston.info(err);
+	});
 }
 
 
