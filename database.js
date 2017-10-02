@@ -20,7 +20,7 @@ function write_base_scenario(dbUrl, scenario_base, callback) {
                 baseId = baseScenario._id;
                 // console.log(baseId);
 				//set user id
-				baseScenario.uid = new ObjectID("59c23b3d9b77e0b2e2bc9f12");
+				baseScenario.uid = new ObjectID("59b93998eb13c900013461ad");
 				baseScenario.actions = scenario_base.actions;
 				baseCollection.save(baseScenario)
 				    .then(()=> {

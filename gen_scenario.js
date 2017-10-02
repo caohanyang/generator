@@ -16,8 +16,7 @@ const dbUrl = `mongodb://${serverNames.mongoServerName}:27017/wat_storage`;
 
   
 database.read_candidate_collection(dbUrl, (candi_array) => {
-    var tests = [];
-
+ 
     var i = 0;
     function f() {
         console.log( "start one candidate" );

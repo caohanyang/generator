@@ -16,11 +16,21 @@ const dbUrl = `mongodb://${serverNames.mongoServerName}:27017/wat_storage`;
   
 database.read_result_collection(dbUrl, (candi_result) => {
 	console.log(candi_result.length);
-    for (var i = 0; i < candi_result.length; i++) {
-		var final = gen_bugType(candi_result[i])
+
+	var i = 0;
+    function f() {
+
+        var final = gen_bugType(candi_result[i])
 		// console.log(final);
 		database.write_final_action(dbUrl, final);
-	}
+
+        i++;
+        if( i < candi_result.length ){
+            setTimeout( f, 100 );
+        }
+    }
+
+    f(candi_result);	
 })
 
 function gen_bugType(result){
