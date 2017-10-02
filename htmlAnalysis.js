@@ -1,10 +1,10 @@
 module.exports = function() {
 
-    const CLICKABLE_TAGS = ['submit','reset','radio','file'];
+    const CLICKABLE_TAGS = ['submit','reset'];
     
     return {
         selectorsA: grabSelectorA(),
-        checkbox: grabCheckbox(),
+        // checkbox: grabCheckbox(),
         inputText: grabInputText(),
         inputPassword: grabInputPassword(),
         inputToClick: grabInputToClick(),
@@ -25,19 +25,19 @@ module.exports = function() {
         return selectors;
     }
 
-    function grabCheckbox() {
-        var selectors = [];
-        var sels = document.getElementsByTagName('input');
-        for (var i = 0; i < sels.length; i++) {
-            if (sels[i].type == 'checkbox')
-                selectors.push({
-                    kind: "check",
-                    selector: computeSelector(sels[i]),
-                });
-        }
+    // function grabCheckbox() {
+    //     var selectors = [];
+    //     var sels = document.getElementsByTagName('input');
+    //     for (var i = 0; i < sels.length; i++) {
+    //         if (sels[i].type == 'checkbox')
+    //             selectors.push({
+    //                 kind: "check",
+    //                 selector: computeSelector(sels[i]),
+    //             });
+    //     }
 
-        return selectors;
-    }
+    //     return selectors;
+    // }
 
     function grabInputText() {
         var selectors = [];
@@ -116,34 +116,5 @@ module.exports = function() {
         return names.join(' > ');
     }
 
-    // function getScenario(){
-    //     analysisResult.inputText.forEach(inputText => {
-    //         scenario.addAction(new watlib.TypeAction(inputText.selector,"inputText"));
-    //     });
-
-    //     analysisResult.inputPassword.forEach(inputPassword => {
-    //         scenario.addAction(new watlib.TypeAction(inputPassword.selector,"inputPassword"));
-    //     });
-
-    //     analysisResult.textarea.forEach(textarea => {
-    //         scenario.addAction(new watlib.TypeAction(textarea.selector,"textarea"));
-    //     });
-
-    //     analysisResult.checkbox.forEach(checkbox => {
-    //         scenario.addAction(new watlib.CheckAction(checkbox.selector));
-    //     });
-
-    //     analysisResult.selectorsA.forEach(selectorsA => {
-    //         scenario.addAction(new watlib.MouseOverAction(selectorsA.selector));
-    //     });    // all the links for mouseover
-
-    //     analysisResult.selectorsA.forEach(selectorsA => {
-    //         scenario.addAction(new watlib.ClickAction(selectorsA.selector));
-    //     });
-
-    //     analysisResult.inputToClick.forEach(inputToClick => {
-    //         scenario.addAction(new watlib.ClickAction(inputToClick.selector));
-    //     });
-    // }
 
 };
