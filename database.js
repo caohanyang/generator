@@ -90,6 +90,7 @@ function write_final_action(dbUrl, result) {
 				// create new action item
 				var finalItem = {};
 				finalItem.aid = result.aid;
+				finalItem.action = result.action;
 				// finalItem.FPCA = 0;
 				// finalItem.TPCA_OUT = 0;
 				// finalItem.TPCA_IN_TS = 0;
@@ -104,13 +105,25 @@ function write_final_action(dbUrl, result) {
 
 				var newOne = null;
 				switch(result.type) {
-					case "FPCA": newOne = { $set: finalItem, $inc : { "FPCA" : 1,"TPCA_OUT" : 0,"TPCA_IN_TS" : 0, "TPCA_IN_TF" : 0 } }; break;
-					case "TPCA_OUT": newOne = { $set: finalItem, $inc : { "FPCA" : 0,"TPCA_OUT" : 1,"TPCA_IN_TS" : 0, "TPCA_IN_TF" : 0 } }; break;
-					case "TPCA_IN_TS": newOne = { $set: finalItem, $inc : { "FPCA" : 0,"TPCA_OUT" : 0,"TPCA_IN_TS" : 1, "TPCA_IN_TF" : 0 } }; break;
-					case "TPCA_IN_TF": newOne = { $set: finalItem, $inc : { "FPCA" : 0,"TPCA_OUT" : 0,"TPCA_IN_TS" : 0, "TPCA_IN_TF" : 1 } }; break;					     
+					case "FPCA": newOne = { $set: finalItem,
+						                    $inc : { "FPCA" : 1,"TPCA_OUT" : 0,"TPCA_IN_TS" : 0, "TPCA_IN_TF" : 0 },
+											$push : {"cid" : result._id, "FPCA_Scenario" : result.EndScenario }
+										    }; break;
+					case "TPCA_OUT": newOne = { $set: finalItem, 
+						                    $inc : { "FPCA" : 0,"TPCA_OUT" : 1,"TPCA_IN_TS" : 0, "TPCA_IN_TF" : 0 },
+											$push : { "cid" : result._id, "TPCA_OUT_Scenario" : result.EndScenario } 
+											}; break;
+					case "TPCA_IN_TS": newOne = { $set: finalItem,
+						                    $inc : { "FPCA" : 0,"TPCA_OUT" : 0,"TPCA_IN_TS" : 1, "TPCA_IN_TF" : 0 },
+											$push : {"cid" : result._id, "TPCA_IN_TS_Scenario" : result.EndScenario } 
+											}; break;
+					case "TPCA_IN_TF": newOne = { $set: finalItem, 
+						                    $inc : { "FPCA" : 0,"TPCA_OUT" : 0,"TPCA_IN_TS" : 0, "TPCA_IN_TF" : 1 },
+											$push : {"cid" : result._id, "TPCA_IN_TF_Scenario" : result.EndScenario } 
+											}; break;					     
 				}
 
-				console.log(newOne);
+				// console.log(newOne);
 				// use findOneAndReplace to save unique action in action
 				finalCollection.findOneAndReplace(
 					{'aid':result.aid},
@@ -313,9 +326,11 @@ function read_result_collection(dbUrl, callback) {
             { $group : { _id : "$_id",
                          aid: { $addToSet: "$aid" },
                          flag : { $push: "$scenario.flag" },
-                       result: { $push: "$run.isSuccess" }   
+                       result: { $push: "$run.isSuccess" },  
+					   action: { $addToSet: "$action" },
+                       scenario: {$push: "$scenario.actions"}
               } }, 
-            { $unwind : "$aid" }			
+            { $unwind : "$aid" } 			
             ], function(err, result) {
 				callback(result);
 		

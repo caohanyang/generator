@@ -34,9 +34,34 @@ database.read_result_collection(dbUrl, (candi_result) => {
 })
 
 function gen_bugType(result){
-	  var TF = result.result[0];
-	  var IO = result.result[1];
-	  var END = result.result[2];
+      var TF, IO, END;
+	  var EndScenario;
+	  
+	  
+	  switch (result.flag[0]) {
+		case "TF":  TF = result.result[0]; break;
+		case "IO":  IO = result.result[0]; break;
+		case "END": END = result.result[0]; EndScenario = result.scenario[0]; break;
+	  }
+	
+	  switch (result.flag[1]) {
+		case "TF":  TF = result.result[1]; break;
+		case "IO":  IO = result.result[1]; break;
+		case "END": END = result.result[1]; EndScenario = result.scenario[1]; break;
+	  }
+
+	  switch (result.flag[2]) {
+		case "TF":  TF = result.result[2]; break;
+		case "IO":  IO = result.result[2]; break;
+		case "END": END = result.result[2]; EndScenario = result.scenario[2]; break;
+	  }
+	  
+    //  if (EndScenario == null) {
+	// 	 // only one scenario
+	// 	 // means all the scenarios are the same
+	// 	 EndScenario= result.scenario[0];
+	//  }
+
 	  var type = null;
 
 	  if (TF===false) {
@@ -51,6 +76,7 @@ function gen_bugType(result){
 		  }
 	  }
 	 result.type = type;
+	 result.EndScenario = EndScenario;
 
 	 return result;
 } 
