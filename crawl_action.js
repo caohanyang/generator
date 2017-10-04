@@ -13,10 +13,10 @@ function crawl(dbUrl, url, baseId, index){
 		return nightmare.evaluate(htmlAnalysis).end();
 	}).then(analysisResult => {
 
-		scenario.addAction(new watlib.GotoAction(analysisResult.URL));
-		scenario.addAction(new watlib.ScrollToAction(100, 200));
-		scenario.addAction(new watlib.WaitAction(1000));
-		scenario.addAction(new watlib.BackAction());
+		// scenario.addAction(new watlib.GotoAction(analysisResult.URL));
+		// scenario.addAction(new watlib.ScrollToAction(100, 200));
+		// scenario.addAction(new watlib.WaitAction(1000));
+		// scenario.addAction(new watlib.BackAction());
 
 		analysisResult.inputText.forEach(inputText => {
 			scenario.addAction(new watlib.TypeAction(inputText.selector,"inputText"));
@@ -30,13 +30,13 @@ function crawl(dbUrl, url, baseId, index){
 			scenario.addAction(new watlib.TypeAction(textarea.selector,"textarea"));
 		});
 
-		analysisResult.checkbox.forEach(checkbox => {
-			scenario.addAction(new watlib.CheckAction(checkbox.selector));
-		});
+		// analysisResult.checkbox.forEach(checkbox => {
+		// 	scenario.addAction(new watlib.CheckAction(checkbox.selector));
+		// });
 
-		analysisResult.selectorsA.forEach(selectorsA => {
-			scenario.addAction(new watlib.MouseOverAction(selectorsA.selector));
-		});
+		// analysisResult.selectorsA.forEach(selectorsA => {
+		// 	scenario.addAction(new watlib.MouseOverAction(selectorsA.selector));
+		// });
 
 		analysisResult.selectorsA.forEach(selectorsA => {
 			scenario.addAction(new watlib.ClickAction(selectorsA.selector));

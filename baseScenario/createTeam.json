@@ -1,0 +1,22 @@
+[
+  {
+    "type": "GotoAction",
+    "url": "http://localhost:3001/#/admin/teams"
+  },
+  {
+    "type": "ClickAction",
+    "selector": "#admin-page > DIV:nth-child(1) > DIV:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(2) > BUTTON:nth-child(2)"
+  },
+  {
+    "type": "ClickAction",
+    "selector": "#input_0"
+  },
+  {
+    "type": "ClickAction",
+    "selector": "#edit-team-config-modal > FORM:nth-child(1) > SELECT:nth-child(4)"
+  },
+  {
+    "type": "ClickAction",
+    "selector": "#edit-team-config-modal > FORM:nth-child(1) > DIV:nth-child(10) > BUTTON:nth-child(2)"
+  }
+]

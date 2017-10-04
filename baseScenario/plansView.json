@@ -1,0 +1,38 @@
+
+[
+  {
+    "type": "GotoAction",
+    "url": "http://localhost:3001/#/home"
+  },
+  {
+    "type": "ClickAction",
+    "selector": "#dashboard-page-button > IMG:nth-child(1)"
+  },
+  {
+    "type": "ClickAction",
+    "selector": "#themis-diagnostic-view"
+  },
+  {
+    "type": "ClickAction",
+    "selector": "#themis-action-plan-view"
+  },
+  {
+    "type": "ClickAction",
+    "selector": "#themis-data-room-view"
+  },
+  {
+    "type": "ClickAction",
+    "selector": "#themis-gamification-view"
+  },
+  {
+    "type": "ClickAction",
+    "selector": "#themis-process-view"
+  }
+]
+
+
+
+
+
+
+

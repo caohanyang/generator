@@ -1,0 +1,10 @@
+[
+  {
+    "type": "GotoAction",
+    "url": "http://localhost:3001/#/home"
+  },
+  {
+    "type": "ClickAction",
+    "selector": "#logout > I:nth-child(1)"
+  }
+]

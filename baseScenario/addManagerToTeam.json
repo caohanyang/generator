@@ -1,0 +1,26 @@
+[
+  {
+    "type": "GotoAction",
+    "url": "http://localhost:3001/#/admin/teams"
+  },
+  {
+    "type": "ClickAction",
+    "selector": "#admin-page > DIV:nth-child(1) > DIV:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > TABLE:nth-child(1) > TBODY:nth-child(2) > TR:nth-child(1) > TD:nth-child(5) > BUTTON:nth-child(1) > I:nth-child(1)"
+  },
+  {
+    "type": "ClickAction",
+    "selector": "#admin-page > DIV:nth-child(1) > DIV:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > TABLE:nth-child(1) > TBODY:nth-child(2) > TR:nth-child(2) > TD:nth-child(1) > DIV:nth-child(1) > TABLE:nth-child(1) > TBODY:nth-child(2) > TR:nth-child(2) > TD:nth-child(1) > BUTTON:nth-child(1)"
+  },
+  {
+    "type": "ClickAction",
+    "selector": "#input_0"
+  },
+  {
+    "type": "ClickAction",
+    "selector": "HTML > BODY:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(2) > TABLE:nth-child(1) > TBODY:nth-child(2) > TR:nth-child(1) > TD:nth-child(1) > I:nth-child(1)"
+  },
+  {
+    "type": "ClickAction",
+    "selector": "HTML > BODY:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(3) > BUTTON:nth-child(2)"
+  }
+]
