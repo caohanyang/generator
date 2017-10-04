@@ -1,7 +1,49 @@
 [
+
+  {
+    "type": "GotoAction",
+    "url": "http://localhost:3001/#/login"
+  },
+  {
+    "type":"WaitAction",
+    "ms":1000
+  },
+  {
+    "type": "ClickAction",
+    "selector": "#userLogin"
+  },
+  {
+    "type": "TypeAction",
+    "selector": "#userLogin",
+    "text": "weichen"
+  },
+  {
+    "type": "ClickAction",
+    "selector": "#userPassword"
+  },
+  {
+    "type": "TypeAction",
+    "selector": "#userPassword",
+    "text": "123456"
+  },
+  {
+    "type": "ClickAction",
+    "selector": "button[type=submit]"
+  },
+  {
+    "type":"WaitAction",
+    "ms":1000
+  },
+
+
+
   {
     "type": "GotoAction",
     "url": "http://localhost:3001/#/admin/teams"
+  },
+  {
+    "type":"WaitAction",
+    "ms":1000
   },
   {
     "type": "ClickAction",
@@ -11,6 +53,16 @@
     "type": "ClickAction",
     "selector": "#input_0"
   },
+
+  {
+    "type": "TypeAction",
+    "selector": "#input_0",
+    "text": "123456"
+  },
+  {
+    "type":"WaitAction",
+    "ms":1000
+  },
   {
     "type": "ClickAction",
     "selector": "#edit-team-config-modal > FORM:nth-child(1) > SELECT:nth-child(4)"
@@ -18,5 +70,9 @@
   {
     "type": "ClickAction",
     "selector": "#edit-team-config-modal > FORM:nth-child(1) > DIV:nth-child(10) > BUTTON:nth-child(2)"
+  },
+  {
+    "type":"WaitAction",
+    "ms":1000
   }
 ]

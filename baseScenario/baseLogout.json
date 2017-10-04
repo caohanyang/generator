@@ -1,10 +1,55 @@
 [
   {
     "type": "GotoAction",
-    "url": "http://localhost:3001/#/home"
+    "url": "http://localhost:3001/#/login"
+  },
+  {
+    "type":"WaitAction",
+    "ms":1000
   },
   {
     "type": "ClickAction",
-    "selector": "#logout > I:nth-child(1)"
+    "selector": "#userLogin"
+  },
+  {
+    "type": "TypeAction",
+    "selector": "#userLogin",
+    "text": "weichen"
+  },
+  {
+    "type": "ClickAction",
+    "selector": "#userPassword"
+  },
+  {
+    "type": "TypeAction",
+    "selector": "#userPassword",
+    "text": "123456"
+  },
+  {
+    "type": "ClickAction",
+    "selector": "button[type=submit]"
+  },
+  {
+    "type":"WaitAction",
+    "ms":1000
+  },
+
+
+
+  {
+    "type": "GotoAction",
+    "url": "http://localhost:3001/#/admin/users"
+  },
+  {
+    "type":"WaitAction",
+    "ms":1000
+  },
+  {
+    "type": "ClickAction",
+    "selector": "#logout"
+  },
+  {
+    "type":"WaitAction",
+    "ms":1000
   }
 ]
