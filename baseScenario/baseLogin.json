@@ -1,0 +1,28 @@
+[
+  {
+    "type": "GotoAction",
+    "url": "http://localhost:3001/#/login"
+  },
+  {
+    "type": "ClickAction",
+    "selector": "#userLogin"
+  },
+  {
+    "type": "TypeAction",
+    "selector": "#userLogin",
+    "text": "weichen"
+  },
+  {
+    "type": "ClickAction",
+    "selector": "#userPassword"
+  },
+  {
+    "type": "TypeAction",
+    "selector": "#userPassword",
+    "text": "123456"
+  },
+  {
+    "type": "ClickAction",
+    "selector": "HTML > BODY:nth-child(2) > DIV:nth-child(5) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > FORM:nth-child(2) > BUTTON:nth-child(4)"
+  }
+]
