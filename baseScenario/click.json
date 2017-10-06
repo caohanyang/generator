@@ -14,7 +14,7 @@
   {
     "type": "TypeAction",
     "selector": "#userLogin",
-    "text": "weichen"
+    "text": "cao"
   },
   {
     "type": "ClickAction",
@@ -23,7 +23,7 @@
   {
     "type": "TypeAction",
     "selector": "#userPassword",
-    "text": "123456"
+    "text": "666666"
   },
   {
     "type": "ClickAction",
@@ -37,15 +37,11 @@
 
 
   {
-    "type": "GotoAction",
-    "url": "http://localhost:3001/#/admin/users"
-  },
-  {
-    "type":"WaitAction",
-    "ms":1000
+    "type": "ClickAction",
+    "selector": "#admin-page-button > IMG:nth-child(1)"
   },
 
-
+  
   
   {
     "type": "ClickAction",
@@ -86,5 +82,9 @@
   {
     "type": "ClickAction",
     "selector": "#admin-page > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(11) > A:nth-child(1) > SPAN:nth-child(2)"
+  },
+  {
+    "type":"WaitAction",
+    "ms":1000
   }
 ]

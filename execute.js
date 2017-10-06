@@ -6,7 +6,7 @@ const serverNames = {
 	mongoServerName : argv.mongo,
 	rabbitServerName : argv.rabbit    
 }
-const dbUrl = `mongodb://${serverNames.mongoServerName}:27017/wat_storage`;
+const dbUrl = `mongodb://${serverNames.mongoServerName}:27018/wat_storage`;
 getScenarios();
 
 function getScenarios() {

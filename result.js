@@ -12,7 +12,7 @@ const serverNames = {
 	mongoServerName : argv.mongo
 }
 
-const dbUrl = `mongodb://${serverNames.mongoServerName}:27017/wat_storage`;
+const dbUrl = `mongodb://${serverNames.mongoServerName}:27018/wat_storage`;
   
 database.read_result_collection(dbUrl, (candi_result) => {
 	console.log(candi_result.length);
