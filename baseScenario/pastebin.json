@@ -30,11 +30,10 @@
     "type": "ClickAction",
     "selector": "#header_new_paste"
   },
-
   {
     "type": "TypeAction",
     "selector": "#paste_code",
-    "text": "hello world"
+    "text": "\thello world"
   },
   {
     "type": "ClickAction",
@@ -48,6 +47,14 @@
   {
     "type": "ClickAction",
     "selector": "#submit"
+  },
+  {
+    "type": "ClickAction",
+    "selector": "#header_dropdown"
+  },
+  {
+    "type": "ClickAction",
+    "selector": "#jq-dropdown-1 > UL:nth-child(1) > LI:nth-child(10)"
   },
   {
     "type":"WaitAction",

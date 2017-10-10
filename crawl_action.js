@@ -3,7 +3,7 @@ function crawl(dbUrl, url, baseId, index){
 
 	const Nightmare = require('nightmare');
 	const htmlAnalysis = require('./htmlAnalysis.js');
-	const watlib = require('wat-action');
+	const watlib = require('wat_action_nightmare');
 	var nightmare = new Nightmare({ show: false });
 	var database = require('./database.js');
 	var scenario = new watlib.Scenario();

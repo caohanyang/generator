@@ -1,11 +1,10 @@
 const Nightmare = require('nightmare');
-const wat_action = require('wat-action');
-const scenario_str = require('./baseScenario/click.json');
+const wat_action = require('wat_action_nightmare');
+const scenario_str = require('./baseScenario/pastebin.json');
 var scenario_base = new wat_action.Scenario(scenario_str);
 var crawl_action = require('./crawl_action.js');
 var fs = require('fs');
 const argv = require('yargs').argv;
-const wait=require('wait.for')
 var database = require('./database.js');
 var asyncLoop = require('node-async-loop');
 var winston = require('winston');
@@ -68,8 +67,10 @@ function gen_candi_actions(baseId, index) {
 	
 	var nightmare = new Nightmare({show:true});				
 	var scenario = new wat_action.Scenario(scenario_str);
-	scenario.actions.splice(index+1,scenario_base.actions.length-index+1);	
+	// scenario.actions.split(index+1,scenario_base.actions.length-index+1);	
+	var newActions = scenario.actions.slice(0,index+1);
 	console.log("begin to crawl " + baseId + " " + index);
+	scenario.actions = newActions;
 	console.log(scenario.actions);
 
 	scenario.attachTo(nightmare)

@@ -1,6 +1,6 @@
 const Nightmare = require('nightmare');
-const wat_action = require('wat-action');
-const scenario_str = require('./base_scenario.json');
+const wat_action = require('wat_action_nightmare');
+const scenario_str = require('./baseScenario/pastebin.json');
 var scenario_base = new wat_action.Scenario(scenario_str);
 var crawl_action = require('./crawl_action.js');
 var fs = require('fs');
