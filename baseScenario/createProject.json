@@ -1,42 +1,73 @@
 [
+
   {
     "type": "GotoAction",
-    "url": "http://localhost:3001/#/admin/projects"
+    "url": "http://localhost:3001/#/login"
+  },
+  {
+    "type":"WaitAction",
+    "ms":1000
+  },
+  {
+    "type": "TypeAction",
+    "selector": "#userLogin",
+    "text": "weichen"
+  },
+  {
+    "type": "TypeAction",
+    "selector": "#userPassword",
+    "text": "123456"
+  },
+  {
+    "type": "ClickAction",
+    "selector": "button[type=submit]"
+  },
+  {
+    "type":"WaitAction",
+    "ms":1000
+  },
+
+
+
+
+  
+
+  {
+    "type": "ClickAction",
+    "selector": "#admin-page-button > IMG:nth-child(1)"
+  },
+  {
+    "type":"WaitAction",
+    "ms":1000
+  },
+  {
+    "type": "ClickAction",
+    "selector": "#admin-page > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(2) > A:nth-child(1) > SPAN:nth-child(2)"
+  },
+  {
+    "type":"WaitAction",
+    "ms":1000
   },
   {
     "type": "ClickAction",
     "selector": "#admin-page > DIV:nth-child(1) > DIV:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(2) > BUTTON:nth-child(2)"
   },
   {
-    "type": "ClickAction",
-    "selector": "#input_0"
+    "type":"WaitAction",
+    "ms":1000
+  },
+  {
+    "type": "TypeAction",
+    "selector": "HTML > BODY:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(2) > FORM:nth-child(1) > MD-INPUT-CONTAINER:nth-child(2) > INPUT:nth-child(2)",
+    "text": "test2"
+  },
+  {
+    "type":"WaitAction",
+    "ms":1000
   },
   {
     "type": "ClickAction",
-    "selector": "#input_1"
-  },
-  {
-    "type": "ClickAction",
-    "selector": "#edit-project-config-modal > FORM:nth-child(1) > DIV:nth-child(4)"
-  },
-  {
-    "type": "ClickAction",
-    "selector": "#edit-project-config-modal > FORM:nth-child(1) > DIV:nth-child(5) > SELECT:nth-child(1)"
-  },
-  {
-    "type": "ClickAction",
-    "selector": "#edit-project-config-modal > FORM:nth-child(1) > DIV:nth-child(6)"
-  },
-  {
-    "type": "ClickAction",
-    "selector": "#edit-project-config-modal > FORM:nth-child(1) > DIV:nth-child(7) > SELECT:nth-child(1)"
-  },
-  {
-    "type": "ClickAction",
-    "selector": "#edit-project-config-modal > FORM:nth-child(1) > DIV:nth-child(11) > TABLE:nth-child(1) > TBODY:nth-child(2) > TR:nth-child(1) > TD:nth-child(1) > I:nth-child(1)"
-  },
-  {
-    "type": "ClickAction",
-    "selector": "#edit-project-config-modal > FORM:nth-child(1) > DIV:nth-child(13) > BUTTON:nth-child(2)"
+    "selector": "HTML > BODY:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(2) > FORM:nth-child(1) > DIV:nth-child(13) > BUTTON:nth-child(2)"
   }
+  
 ]

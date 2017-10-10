@@ -9,17 +9,9 @@
     "ms":1000
   },
   {
-    "type": "ClickAction",
-    "selector": "#userLogin"
-  },
-  {
     "type": "TypeAction",
     "selector": "#userLogin",
     "text": "weichen"
-  },
-  {
-    "type": "ClickAction",
-    "selector": "#userPassword"
   },
   {
     "type": "TypeAction",
@@ -38,8 +30,16 @@
 
 
   {
-    "type": "GotoAction",
-    "url": "http://localhost:3001/#/admin/teams"
+    "type": "ClickAction",
+    "selector": "#admin-page-button > DIV:nth-child(2)"
+  },
+  {
+    "type":"WaitAction",
+    "ms":1000
+  },
+  {
+    "type": "ClickAction",
+    "selector": "#admin-page > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(4) > A:nth-child(1) > SPAN:nth-child(2)"
   },
   {
     "type":"WaitAction",
@@ -50,29 +50,32 @@
     "selector": "#admin-page > DIV:nth-child(1) > DIV:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(2) > BUTTON:nth-child(2)"
   },
   {
-    "type": "ClickAction",
-    "selector": "#input_0"
+    "type":"WaitAction",
+    "ms":1000
   },
 
   {
     "type": "TypeAction",
-    "selector": "#input_0",
-    "text": "123456"
+    "selector": "HTML > BODY:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(2) > FORM:nth-child(1) > MD-INPUT-CONTAINER:nth-child(2) > INPUT:nth-child(2)",
+    "text": "testTeam"
   },
   {
     "type":"WaitAction",
     "ms":1000
   },
   {
-    "type": "ClickAction",
-    "selector": "#edit-team-config-modal > FORM:nth-child(1) > SELECT:nth-child(4)"
+    "type": "SelectAction",
+    "selector": "#edit-team-config-modal > FORM:nth-child(1) > SELECT:nth-child(4)",    
+    "option": "object:2243"
   },
-  {
-    "type": "ClickAction",
-    "selector": "#edit-team-config-modal > FORM:nth-child(1) > DIV:nth-child(10) > BUTTON:nth-child(2)"
-  },
+
   {
     "type":"WaitAction",
     "ms":1000
+  },
+  {
+    "type": "ClickAction",
+    "selector": "HTML > BODY:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(2) > FORM:nth-child(1) > DIV:nth-child(10) > BUTTON:nth-child(2)"
   }
+
 ]

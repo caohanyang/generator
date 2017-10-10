@@ -1,14 +1,69 @@
 [
+
   {
     "type": "GotoAction",
-    "url": "http://localhost:3001/#/admin/projects"
+    "url": "http://localhost:3001/#/login"
+  },
+  {
+    "type":"WaitAction",
+    "ms":1000
+  },
+
+  {
+    "type": "TypeAction",
+    "selector": "#userLogin",
+    "text": "weichen"
+  },
+
+  {
+    "type": "TypeAction",
+    "selector": "#userPassword",
+    "text": "123456"
   },
   {
     "type": "ClickAction",
-    "selector": "#admin-page > DIV:nth-child(1) > DIV:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > TABLE:nth-child(2) > TBODY:nth-child(2) > TR:nth-child(2) > TD:nth-child(10) > BUTTON:nth-child(4) > I:nth-child(1)"
+    "selector": "button[type=submit]"
+  },
+  {
+    "type":"WaitAction",
+    "ms":1000
+  },
+
+  
+
+
+
+  {
+    "type": "ClickAction",
+    "selector": "#admin-page-button > IMG:nth-child(1)"
+  },
+  {
+    "type":"WaitAction",
+    "ms":1000
+  },
+  {
+    "type": "ClickAction",
+    "selector": "#admin-page > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(2) > A:nth-child(1) > SPAN:nth-child(2)"
+  },
+  {
+    "type":"WaitAction",
+    "ms":1000
+  },
+
+  {
+    "type": "ClickAction",
+    "selector": "#admin-page > DIV:nth-child(1) > DIV:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > TABLE:nth-child(2) > TBODY:nth-child(2) > TR:nth-child(1) > TD:nth-child(10) > BUTTON:nth-child(4) > I:nth-child(1)"
+  },
+  {
+    "type":"WaitAction",
+    "ms":1000
   },
   {
     "type": "ClickAction",
     "selector": "HTML > BODY:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(3) > BUTTON:nth-child(2)"
+  },
+  {
+    "type":"WaitAction",
+    "ms":1000
   }
 ]
