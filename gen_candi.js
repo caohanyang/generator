@@ -73,7 +73,10 @@ function gen_candi_actions(baseId, index) {
 	scenario.actions = newActions;
 	console.log(scenario.actions);
 
-	scenario.attachTo(nightmare)
+	const wat_actions = createWATScenario(scenario);
+	const wat_scenario = new wat_action.Scenario(wat_actions);
+
+	wat_scenario.attachTo(nightmare)
 	.url()
 	.end()
 	.then((url) => {
@@ -89,7 +92,43 @@ function gen_candi_actions(baseId, index) {
 
 
 
+function createWATScenario(scenario) {
+	var wait = scenario.wait || 0;
+	var cssSelector = scenario.cssselector || 'watId';
+	var actions = [];
+	winston.info(cssSelector);
+	scenario.actions.forEach((action) => {
+		var watAction = {
+			type: action.type
+		};
+		watAction.url = action.url || undefined;
+		watAction.text = action.text || undefined;
+		if (action.selector) {
+			watAction.selector = action.selector[cssSelector];
+			if (actions.length
+			&& action.type === 'TypeAction'
+			&& actions[actions.length - 1].type === 'TypeAction'
+			&& actions[actions.length - 1].selector === action.selector[cssSelector]) {
+				actions.pop();
+			}
+		}
+		actions.push(watAction);
+	});
 
+	if (wait > 0) {
+		var actionsWithWait = [];
+		for (let index = 0; index < actions.length ; index++) {
+			actionsWithWait.push(actions[index]);
+			actionsWithWait.push({
+				type: 'WaitAction',
+				ms: Number(wait)
+			});
+		}
+		return actionsWithWait;
+	} else {
+		return actions;
+	}
+}
 
 
 

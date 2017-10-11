@@ -5,60 +5,103 @@
   },
   {
     "type": "ClickAction",
-    "selector": "#content_left > DIV:nth-child(8) > DIV:nth-child(2) > A:nth-child(4)"
+    "selector": {
+      "watId": "#content_left > DIV:nth-child(8) > DIV:nth-child(2) > A:nth-child(4)",
+      "watPath": null,
+      "optimal": null
+    }
   },
   {
     "type": "ClickAction",
-    "selector": "#myform > DIV:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1)"
+    "selector": {
+      "watId": "#myform > DIV:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1)",
+      "watPath": null,
+      "optimal": null
+    }
   },
   {
     "type": "TypeAction",
-    "selector": "#myform > DIV:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(2) > INPUT:nth-child(1)",
+    "selector": {
+      "watId": "#myform > DIV:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(2) > INPUT:nth-child(1)",
+      "watPath": null,
+      "optimal": null
+    },
     "text": "cao007"
   },
   {
     "type": "TypeAction",
-    "selector": "#myform > DIV:nth-child(2) > DIV:nth-child(2) > DIV:nth-child(2) > INPUT:nth-child(1)",
+    "selector": {
+      "watId": "#myform > DIV:nth-child(2) > DIV:nth-child(2) > DIV:nth-child(2) > INPUT:nth-child(1)",
+      "watPath": null,
+      "optimal": null
+    },
     "text": "8365116"
   },
   {
     "type": "ClickAction",
-    "selector": "#myform > DIV:nth-child(2) > DIV:nth-child(3) > DIV:nth-child(2) > INPUT:nth-child(1)"
+    "selector": {
+      "watId": "#myform > DIV:nth-child(2) > DIV:nth-child(3) > DIV:nth-child(2) > INPUT:nth-child(1)",
+      "watPath": null,
+      "optimal": null
+    }
   },
 
   {
     "type": "ClickAction",
-    "selector": "#header_new_paste"
+    "selector": {
+      "watId": "#header_new_paste",
+      "watPath": null,
+      "optimal": null
+    }
   },
   {
     "type": "TypeAction",
-    "selector": "#paste_code",
+    "selector": {
+      "watId": "#paste_code",
+      "watPath": null,
+      "optimal": null
+    },
     "text": "\thello world"
   },
   {
     "type": "ClickAction",
-    "selector": "#myform > DIV:nth-child(6) > DIV:nth-child(4) > DIV:nth-child(2) > SPAN:nth-child(2) > SPAN:nth-child(1) > SPAN:nth-child(1)"
+    "selector": {
+      "watId": "#myform > DIV:nth-child(6) > DIV:nth-child(4) > DIV:nth-child(2) > SPAN:nth-child(2) > SPAN:nth-child(1) > SPAN:nth-child(1)",
+      "watPath": null,
+      "optimal": null
+    }
   },
   {
     "type": "TypeAction",
-    "selector": "#myform > DIV:nth-child(6) > DIV:nth-child(5) > DIV:nth-child(2) > INPUT:nth-child(1)",
+    "selector": {
+      "watId": "#myform > DIV:nth-child(6) > DIV:nth-child(5) > DIV:nth-child(2) > INPUT:nth-child(1)",
+      "watPath": null,
+      "optimal": null
+    },
     "text": "hi"
   },
   {
     "type": "ClickAction",
-    "selector": "#submit"
+    "selector": {
+      "watId": "#submit",
+      "watPath": null,
+      "optimal": null
+    }
   },
   {
     "type": "ClickAction",
-    "selector": "#header_dropdown"
+    "selector": {
+      "watId": "#header_dropdown",
+      "watPath": null,
+      "optimal": null
+    }
   },
   {
     "type": "ClickAction",
-    "selector": "#jq-dropdown-1 > UL:nth-child(1) > LI:nth-child(10)"
-  },
-  {
-    "type":"WaitAction",
-    "ms":10000
+    "selector": {
+      "watId": "#jq-dropdown-1 > UL:nth-child(1) > LI:nth-child(10)",
+      "watPath": null,
+      "optimal": null
+    }
   }
-
 ]

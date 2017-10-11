@@ -27,7 +27,7 @@ function getScenarios() {
 						var obj = founds[i];
 						console.log(obj._id);	
 
-						request('http://localhost:8091/playNow/'+obj._id, function (error, response, body) {
+						request('http://localhost:8090/playNow/'+obj._id, function (error, response, body) {
 							if (!error) {
 								console.log("body"+body);
 							}

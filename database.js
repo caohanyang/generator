@@ -22,6 +22,25 @@ function write_base_scenario(dbUrl, scenario_base, callback) {
 				//set user id
 				baseScenario.uid = new ObjectID("59b93998eb13c900013461ad");
 				baseScenario.actions = scenario_base.actions;
+
+				if (! baseScenario.wait) {
+					baseScenario.wait = 0;
+				}
+				if (! baseScenario.cssselector) {
+					baseScenario.cssselector = 'watId';
+				}
+				if (! baseScenario.name) {
+					baseScenario.name = 'MyScenario';
+				}
+				if (! baseScenario.assert) {
+					baseScenario.assert = {
+						end : true,
+						selector : 'body',
+						property: 'innerHTML',
+						contains: 'success'
+					};
+				}
+
 				baseCollection.save(baseScenario)
 				    .then(()=> {
 						winston.info("Success to save base scenario");
@@ -162,6 +181,24 @@ function write_noise_scenario(dbUrl, scenario_noise, cid, flag) {
                 noiseScenario.flag = flag;
 				//set user id
 				// console.log(scenario_noise.actions);
+				if (! noiseScenario.wait) {
+					noiseScenario.wait = 0;
+				}
+				if (! noiseScenario.cssselector) {
+					noiseScenario.cssselector = 'watId';
+				}
+				if (! noiseScenario.name) {
+					noiseScenario.name = 'MyScenario';
+				}
+				if (! noiseScenario.assert) {
+					noiseScenario.assert = {
+						end : true,
+						selector : 'body',
+						property: 'innerHTML',
+						contains: 'success'
+					};
+				}
+
 				noiseScenario.actions = scenario_noise.actions;
 				noiseCollection.save(noiseScenario)
 				    .then(()=> {
