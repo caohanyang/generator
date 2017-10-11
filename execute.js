@@ -35,7 +35,7 @@ function getScenarios() {
 				
 						i++;
 						if( i < founds.length ){
-							setTimeout( f, 1000 );
+							setTimeout( f, 10000 );
 						}
 					}
 				
