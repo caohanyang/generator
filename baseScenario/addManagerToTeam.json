@@ -3,83 +3,83 @@
   {
     "type": "GotoAction",
     "url": "http://localhost:3001/#/login"
-  },
-  {
-    "type":"WaitAction",
-    "ms":1000
-  },
+  },  
   {
     "type": "TypeAction",
-    "selector": "#userLogin",
+    "selector": {
+      "watId":"#userLogin",
+      "watPath": null,
+      "optimal": null
+    },
     "text": "weichen"
   },
   {
     "type": "TypeAction",
-    "selector": "#userPassword",
+    "selector": {
+      "watId":"#userPassword",
+      "watPath": null,
+      "optimal": null
+    },
     "text": "123456"
   },
   {
     "type": "ClickAction",
-    "selector": "button[type=submit]"
+    "selector": {
+      "watId":"button[type=submit]",
+      "watPath": null,
+      "optimal": null
+    }
   },
-  {
-    "type":"WaitAction",
-    "ms":1000
-  },
+
 
 
   {
     "type": "ClickAction",
-    "selector": "#admin-page-button > IMG:nth-child(1)"
+    "selector": {
+      "watId":"#admin-page-button > IMG:nth-child(1)",
+      "watPath": null,
+      "optimal": null
+    }
   },
-
   {
     "type": "ClickAction",
-    "selector": "#admin-page > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(2) > A:nth-child(1) > SPAN:nth-child(2)"
-  },
-
-  {
-    "type":"WaitAction",
-    "ms":1000
-  },
-  
+    "selector": {
+      "watId":"#admin-page > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(2) > A:nth-child(1) > SPAN:nth-child(2)",
+      "watPath": null,
+      "optimal": null
+    }
+  },  
   {
     "type": "ClickAction",
-    "selector": "#admin-page > DIV:nth-child(1) > DIV:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > TABLE:nth-child(2) > TBODY:nth-child(2) > TR:nth-child(1) > TD:nth-child(9) > BUTTON:nth-child(1)"
+    "selector": {
+      "watId":"#admin-page > DIV:nth-child(1) > DIV:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > TABLE:nth-child(2) > TBODY:nth-child(2) > TR:nth-child(1) > TD:nth-child(9) > BUTTON:nth-child(1)",
+      "watPath": null,
+      "optimal": null
+    }
   },
-
-  {
-    "type":"WaitAction",
-    "ms":1000
-  },
-
   {
     "type": "ClickAction",
-    "selector": "#admin-page > DIV:nth-child(1) > DIV:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > TABLE:nth-child(2) > TBODY:nth-child(2) > TR:nth-child(2) > TD:nth-child(1) > DIV:nth-child(1) > TABLE:nth-child(1) > TBODY:nth-child(2) > TR:nth-child(1) > TD:nth-child(1) > BUTTON:nth-child(1)"
+    "selector": {
+      "watId":"#admin-page > DIV:nth-child(1) > DIV:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > TABLE:nth-child(2) > TBODY:nth-child(2) > TR:nth-child(2) > TD:nth-child(1) > DIV:nth-child(1) > TABLE:nth-child(1) > TBODY:nth-child(2) > TR:nth-child(1) > TD:nth-child(1) > BUTTON:nth-child(1)",
+      "watPath": null,
+      "optimal": null
+    }
   },
-
-  {
-    "type":"WaitAction",
-    "ms":1000
-  },
-
   {
     "type": "ClickAction",
-    "selector": "HTML > BODY:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(2) > TABLE:nth-child(1) > TBODY:nth-child(2) > TR:nth-child(1) > TD:nth-child(1) > I:nth-child(1)"
+    "selector": {
+      "watId":"HTML > BODY:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(2) > TABLE:nth-child(1) > TBODY:nth-child(2) > TR:nth-child(1) > TD:nth-child(1) > I:nth-child(1)",
+      "watPath": null,
+      "optimal": null
+    }
   },
-
-  {
-    "type":"WaitAction",
-    "ms":1000
-  },
-
   {
     "type": "ClickAction",
-    "selector": "HTML > BODY:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(3) > BUTTON:nth-child(2)"
-  },
-
-  {
-    "type":"WaitAction",
-    "ms":1000
+    "selector": {
+      "watId":"HTML > BODY:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(3) > BUTTON:nth-child(2)",
+      "watPath": null,
+      "optimal": null
+    }
   }
+  
 ]
