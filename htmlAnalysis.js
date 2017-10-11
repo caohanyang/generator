@@ -1,6 +1,12 @@
+// var select = require('optimal-select');
+// import { select } from 'optimal-select';
+
 module.exports = function() {
 
     const CLICKABLE_TAGS = ['submit','reset'];
+    // import { select } from 'optimal-select';
+    // var select = require('optimal-select');
+
     
     return {
         selectorsA: grabSelectorA(),
@@ -9,6 +15,7 @@ module.exports = function() {
         inputPassword: grabInputPassword(),
         inputToClick: grabInputToClick(),
         textarea: grabTextarea(),
+        selectOption: grabSelectOptions(),
     };
 
     function grabSelectorA() {
@@ -97,6 +104,21 @@ module.exports = function() {
         return selectors;
     }
 
+    function grabSelectOptions() {
+        var selectors = [];
+        var sels = document.getElementsByTagName('option'); //options
+        for (var i = 0; i < sels.length; i++) {
+            selectors.push({
+                kind: "select",
+                selector: computeSelector(sels[i].parentNode),
+                value: sels[i].value,
+            });
+
+        }
+
+        return selectors;
+    }
+
     // function computeSelector(el) {
     //     var names = [];
     //     while (el.parentNode) {
@@ -117,12 +139,11 @@ module.exports = function() {
     // }
 
     function computeSelector(el) {
-        return computeSelectorWithPath(el);
-        // return {
-        //     watId: computeSelectorWithID(el),
-        //     watPath: computeSelectorWithPath(el),
-        //     optimal: computeSelectorOptimal(el)
-        // };
+        return {
+            watId: computeSelectorWithID(el),
+            watPath: computeSelectorWithPath(el),
+            optimal: computeSelectorOptimal(el)
+        };
     }
 
     function computeSelectorWithID(el) {
@@ -159,7 +180,8 @@ module.exports = function() {
     }
 
     function computeSelectorOptimal(el) {
-        return select(el);
+        return null;
+        // return select(el);
     }
 
 
