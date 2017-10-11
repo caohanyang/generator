@@ -2,6 +2,23 @@
 // import { select } from 'optimal-select';
 
 module.exports = function() {
+
+    const CLICKABLE_TAGS = ['submit','reset'];
+    // import { select } from 'optimal-select';
+    // var select = require('optimal-select');
+
+    
+    return {
+        selectorsA: grabSelectorA(),
+        // checkbox: grabCheckbox(),
+        inputText: grabInputText(),
+        inputPassword: grabInputPassword(),
+        inputToClick: grabInputToClick(),
+        textarea: grabTextarea(),
+        selectOption: grabSelectOptions(),
+    };
+
+module.exports = function() {
     
         const CLICKABLE_TAGS = ['submit','reset'];
         // import { select } from 'optimal-select';
@@ -118,72 +135,90 @@ module.exports = function() {
     
             return selectors;
         }
-    
-        // function computeSelector(el) {
-        //     var names = [];
-        //     while (el.parentNode) {
-        //         if (el.id) {
-        //             names.unshift(`#${el.id}`);
-        //             break;
-        //         } else {
-        //             if (el == el.ownerDocument.documentElement)
-        //                 names.unshift(el.tagName);
-        //             else {
-        //                 for (var c = 1, e = el; e.previousElementSibling; e = e.previousElementSibling, c++);
-        //                     names.unshift(`${el.tagName}:nth-child(${c})`);
-        //             }
-        //             el = el.parentNode;
-        //         }
-        //     }
-        //     return names.join(' > ');
-        // }
-    
-        function computeSelector(el) {
-            return {
-                watId: computeSelectorWithID(el),
-                watPath: computeSelectorWithPath(el),
-                optimal: computeSelectorOptimal(el)
-            };
+
+        return selectors;
+    }
+
+    function grabSelectOptions() {
+        var selectors = [];
+        var sels = document.getElementsByTagName('option'); //options
+        for (var i = 0; i < sels.length; i++) {
+            selectors.push({
+                kind: "select",
+                selector: computeSelector(sels[i].parentNode),
+                value: sels[i].value,
+            });
+
         }
-    
-        function computeSelectorWithID(el) {
-            var names = [];
-            while (el.parentNode) {
-                if (el.id) {
-                    names.unshift(`#${el.id}`);
-                    break;
-                } else {
-                    if (el == el.ownerDocument.documentElement)
-                        names.unshift(el.tagName);
-                    else {
-                        for (var c = 1, e = el; e.previousElementSibling; e = e.previousElementSibling, c++);
-                            names.unshift(`${el.tagName}:nth-child(${c})`);
-                    }
-                    el = el.parentNode;
+
+        return selectors;
+    }
+
+    // function computeSelector(el) {
+    //     var names = [];
+    //     while (el.parentNode) {
+    //         if (el.id) {
+    //             names.unshift(`#${el.id}`);
+    //             break;
+    //         } else {
+    //             if (el == el.ownerDocument.documentElement)
+    //                 names.unshift(el.tagName);
+    //             else {
+    //                 for (var c = 1, e = el; e.previousElementSibling; e = e.previousElementSibling, c++);
+    //                     names.unshift(`${el.tagName}:nth-child(${c})`);
+    //             }
+    //             el = el.parentNode;
+    //         }
+    //     }
+    //     return names.join(' > ');
+    // }
+
+    function computeSelector(el) {
+        return {
+            watId: computeSelectorWithID(el),
+            watPath: computeSelectorWithPath(el),
+            optimal: computeSelectorOptimal(el)
+        };
+    }
+
+    function computeSelectorWithID(el) {
+        var names = [];
+        while (el.parentNode) {
+            if (el.id) {
+                names.unshift(`#${el.id}`);
+                break;
+            } else {
+                if (el == el.ownerDocument.documentElement)
+                    names.unshift(el.tagName);
+                else {
+                    for (var c = 1, e = el; e.previousElementSibling; e = e.previousElementSibling, c++);
+                        names.unshift(`${el.tagName}:nth-child(${c})`);
                 }
             }
             return names.join(' > ');
         }
-    
-        function computeSelectorWithPath(el) {
-            return null;
-            // var names = [];
-            // while (el.parentNode) {
-            //     if (el == el.ownerDocument.documentElement)
-            //         names.unshift(el.tagName);
-            //     else {
-            //         for (var c = 1, e = el; e.previousElementSibling; e = e.previousElementSibling, c++);
-            //             names.unshift(`${el.tagName}:nth-child(${c})`);
-            //     }
-            //     el = el.parentNode;
-            // }
-            // return names.join(' > ');
-        }
-    
-        function computeSelectorOptimal(el) {
-            return null;
-            // return select(el);
-        }
-    
-    
-    };
+        return names.join(' > ');
+    }
+
+    function computeSelectorWithPath(el) {
+        return null;
+        // var names = [];
+        // while (el.parentNode) {
+        //     if (el == el.ownerDocument.documentElement)
+        //         names.unshift(el.tagName);
+        //     else {
+        //         for (var c = 1, e = el; e.previousElementSibling; e = e.previousElementSibling, c++);
+        //             names.unshift(`${el.tagName}:nth-child(${c})`);
+        //     }
+        //     el = el.parentNode;
+        // }
+        // return names.join(' > ');
+    }
+
+    function computeSelectorOptimal(el) {
+        return null;
+        // return select(el);
+    }
+
+
+};
