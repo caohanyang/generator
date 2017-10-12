@@ -1,7 +1,7 @@
 [
   {
     "type": "GotoAction",
-    "url": "http://localhost:3001/#/login"
+    "url": "http://147.210.128.235:3001/#/login"
   },
   {
     "type":"WaitAction",
