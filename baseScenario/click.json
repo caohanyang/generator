@@ -4,10 +4,6 @@
     "url": "http://147.210.128.235:3001/#/login"
   },
   {
-    "type":"WaitAction",
-    "ms":1000
-  },
-  {
     "type": "TypeAction",
     "selector": {
       "watId": "#userLogin",
@@ -32,10 +28,6 @@
       "watPath": "HTML > BODY:nth-child(2) > DIV:nth-child(5) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > FORM:nth-child(2) > BUTTON:nth-child(4)",
       "optimal": "[type=\"submit\"]"
     }
-  },
-  {
-    "type":"WaitAction",
-    "ms":1000
   },
 
 
