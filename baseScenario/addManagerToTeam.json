@@ -52,27 +52,30 @@
   {
     "type": "ClickAction",
     "selector": {
-      "watId":"#admin-page > DIV:nth-child(1) > DIV:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > TABLE:nth-child(2) > TBODY:nth-child(2) > TR:nth-child(1) > TD:nth-child(9) > BUTTON:nth-child(1)",
+      "watId":"#admin-page > DIV:nth-child(1) > DIV:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > TABLE:nth-child(2) > TBODY:nth-child(2) > TR:nth-child(2) > TD:nth-child(9) > BUTTON:nth-child(1) > I:nth-child(1)",
       "watPath": null,
       "optimal": null
     }
   },
+
   {
     "type": "ClickAction",
     "selector": {
-      "watId":"#admin-page > DIV:nth-child(1) > DIV:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > TABLE:nth-child(2) > TBODY:nth-child(2) > TR:nth-child(2) > TD:nth-child(1) > DIV:nth-child(1) > TABLE:nth-child(1) > TBODY:nth-child(2) > TR:nth-child(1) > TD:nth-child(1) > BUTTON:nth-child(1)",
+      "watId": "#admin-page > DIV:nth-child(1) > DIV:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > TABLE:nth-child(2) > TBODY:nth-child(2) > TR:nth-child(3) > TD:nth-child(1) > DIV:nth-child(1) > TABLE:nth-child(1) > TBODY:nth-child(2) > TR:nth-child(1) > TD:nth-child(1) > BUTTON:nth-child(1)",
       "watPath": null,
       "optimal": null
     }
   },
+
   {
     "type": "ClickAction",
     "selector": {
-      "watId":"HTML > BODY:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(2) > TABLE:nth-child(1) > TBODY:nth-child(2) > TR:nth-child(1) > TD:nth-child(1) > I:nth-child(1)",
+      "watId": "HTML > BODY:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(2) > TABLE:nth-child(1) > TBODY:nth-child(2) > TR:nth-child(1) > TD:nth-child(1) > I:nth-child(1)",
       "watPath": null,
       "optimal": null
     }
   },
+
   {
     "type": "ClickAction",
     "selector": {
@@ -80,6 +83,15 @@
       "watPath": null,
       "optimal": null
     }
+  },
+
+  {
+    "type": "ClickAction",
+    "selector": {
+      "watId": "#admin-page > DIV:nth-child(1) > DIV:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > TABLE:nth-child(2) > TBODY:nth-child(2) > TR:nth-child(3) > TD:nth-child(1) > DIV:nth-child(1) > TABLE:nth-child(1) > TBODY:nth-child(2) > TR:nth-child(1) > TD:nth-child(3) > BUTTON:nth-child(1) > I:nth-child(1)",
+      "watPath": null,
+      "optimal": null
+    }
   }
-  
+
 ]

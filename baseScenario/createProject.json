@@ -3,12 +3,7 @@
   {
     "type": "GotoAction",
     "url": "http://localhost:3001/#/login"
-  },
-  {
-    "type":"WaitAction",
-    "ms":1000
-  },
-
+  }, 
   {
     "type": "TypeAction",
     "selector": {
@@ -18,7 +13,6 @@
     },
     "text": "weichen"
   },
-
   {
     "type": "TypeAction",
     "selector": {
@@ -35,10 +29,6 @@
       "watPath": null,
       "optimal": null
     }
-  },
-  {
-    "type":"WaitAction",
-    "ms":1000
   },
 
 
@@ -85,6 +75,23 @@
     "type": "ClickAction",
     "selector": {
       "watId":"HTML > BODY:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(2) > FORM:nth-child(1) > DIV:nth-child(13) > BUTTON:nth-child(2)",
+      "watPath": null,
+      "optimal": null
+    }
+  },
+
+  {
+    "type": "ClickAction",
+    "selector": {
+      "watId": "#admin-page > DIV:nth-child(1) > DIV:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > TABLE:nth-child(2) > TBODY:nth-child(2) > TR:nth-child(5) > TD:nth-child(10) > BUTTON:nth-child(4) > I:nth-child(1)",
+      "watPath": null,
+      "optimal": null
+    }
+  },
+  {
+    "type": "ClickAction",
+    "selector": {
+      "watId": "HTML > BODY:nth-child(2) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(3) > BUTTON:nth-child(2)",
       "watPath": null,
       "optimal": null
     }

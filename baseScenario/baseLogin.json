@@ -2,35 +2,31 @@
   {
     "type": "GotoAction",
     "url": "http://localhost:3001/#/login"
-  },
-  {
-    "type":"WaitAction",
-    "ms":1000
-  },
-  {
-    "type": "ClickAction",
-    "selector": "#userLogin"
-  },
+  },  
   {
     "type": "TypeAction",
-    "selector": "#userLogin",
+    "selector": {
+      "watId":"#userLogin",
+      "watPath": null,
+      "optimal": null
+    },
     "text": "weichen"
   },
   {
-    "type": "ClickAction",
-    "selector": "#userPassword"
-  },
-  {
     "type": "TypeAction",
-    "selector": "#userPassword",
+    "selector": {
+      "watId":"#userPassword",
+      "watPath": null,
+      "optimal": null
+    },
     "text": "123456"
   },
   {
     "type": "ClickAction",
-    "selector": "button[type=submit]"
-  },
-  {
-    "type":"WaitAction",
-    "ms":1000
+    "selector": {
+      "watId":"button[type=submit]",
+      "watPath": null,
+      "optimal": null
+    }
   }
 ]
