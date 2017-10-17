@@ -1,6 +1,6 @@
 const Nightmare = require('nightmare');
 const wat_action = require('wat_action_nightmare');
-const scenario_str = require('./baseScenario/pastebin.json');
+const scenario_str = require('./baseScenario/createProject.json');
 var scenario_base = new wat_action.Scenario(scenario_str);
 var crawl_action = require('./crawl_action.js');
 var fs = require('fs');
@@ -71,6 +71,7 @@ function gen_candi_actions(baseId, index) {
 	var newActions = scenario.actions.slice(0,index+1);
 	console.log("begin to crawl " + baseId + " " + index);
 	scenario.actions = newActions;
+	scenario.wait = 1000;
 	console.log(scenario.actions);
 
 	const wat_actions = createWATScenario(scenario);

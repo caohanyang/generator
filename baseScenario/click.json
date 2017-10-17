@@ -1,90 +1,140 @@
 [
   {
     "type": "GotoAction",
-    "url": "http://localhost:3001/#/login"
-  },
-  {
-    "type":"WaitAction",
-    "ms":1000
-  },
-  {
-    "type": "ClickAction",
-    "selector": "#userLogin"
+    "url": "http://147.210.128.235:3001/#/login"
   },
   {
     "type": "TypeAction",
-    "selector": "#userLogin",
-    "text": "cao"
-  },
-  {
-    "type": "ClickAction",
-    "selector": "#userPassword"
+    "selector": {
+      "watId": "#userLogin",
+      "watPath": "HTML > BODY:nth-child(2) > DIV:nth-child(5) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > FORM:nth-child(2) > MD-INPUT-CONTAINER:nth-child(1) > INPUT:nth-child(2)",
+      "optimal": ".md-input-focused .ng-invalid-required"
+    },
+    "text": "weichen"
   },
   {
     "type": "TypeAction",
-    "selector": "#userPassword",
-    "text": "666666"
+    "selector": {
+      "watId": "#userPassword",
+      "watPath": "HTML > BODY:nth-child(2) > DIV:nth-child(5) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > FORM:nth-child(2) > MD-INPUT-CONTAINER:nth-child(2) > INPUT:nth-child(2)",
+      "optimal": ".themis-filled-input.ng-invalid-required"
+    },
+    "text": "123456"
   },
   {
     "type": "ClickAction",
-    "selector": "button[type=submit]"
-  },
-  {
-    "type":"WaitAction",
-    "ms":1000
+    "selector": {
+      "watId": "[type=\"submit\"]",
+      "watPath": "HTML > BODY:nth-child(2) > DIV:nth-child(5) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > FORM:nth-child(2) > BUTTON:nth-child(4)",
+      "optimal": "[type=\"submit\"]"
+    }
   },
 
 
 
   {
     "type": "ClickAction",
-    "selector": "#admin-page-button > IMG:nth-child(1)"
+    "selector": {
+      "watId": "#admin-page-button > DIV:nth-child(2) > SPAN:nth-child(1)",
+      "watPath": "HTML > BODY:nth-child(2) > HEADER:nth-child(3) > NAV:nth-child(2) > UL:nth-child(1) > LI:nth-child(3) > A:nth-child(1) > DIV:nth-child(2) > SPAN:nth-child(1)",
+      "optimal": "#admin-page-button [ng-if]"
+    }
   },
-
+  {
+    "type": "ClickAction",
+    "selector": {
+      "watId": "#admin-page > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(2) > A:nth-child(1) > SPAN:nth-child(2)",
+      "watPath": "HTML > BODY:nth-child(2) > DIV:nth-child(5) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(2) > A:nth-child(1) > SPAN:nth-child(2)",
+      "optimal": ".ng-scope:nth-of-type(2) .admin-menu-link .ng-binding:nth-child(2)"
+    }
+  },
+  {
+    "type": "ClickAction",
+    "selector": {
+      "watId": "#admin-page > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(2) > A:nth-child(1) > SPAN:nth-child(2)",
+      "watPath": "HTML > BODY:nth-child(2) > DIV:nth-child(5) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(2) > A:nth-child(1) > SPAN:nth-child(2)",
+      "optimal": ".ng-scope:nth-of-type(2) .admin-menu-link .ng-binding:nth-child(2)"
+    }
+  },
+  {
+    "type": "ClickAction",
+    "selector": {
+      "watId": "#admin-page > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(2) > A:nth-child(1) > SPAN:nth-child(2)",
+      "watPath": "HTML > BODY:nth-child(2) > DIV:nth-child(5) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(2) > A:nth-child(1) > SPAN:nth-child(2)",
+      "optimal": ".ng-scope:nth-of-type(2) .admin-menu-link .ng-binding:nth-child(2)"
+    }
+  },
+  {
+    "type": "ClickAction",
+    "selector": {
+      "watId": "#admin-page > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(4) > A:nth-child(1) > SPAN:nth-child(2)",
+      "watPath": "HTML > BODY:nth-child(2) > DIV:nth-child(5) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(4) > A:nth-child(1) > SPAN:nth-child(2)",
+      "optimal": ".ng-scope:nth-of-type(4) .admin-menu-link .ng-binding:nth-child(2)"
+    }
+  },
+  {
+    "type": "ClickAction",
+    "selector": {
+      "watId": "#admin-page > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(4) > A:nth-child(1) > SPAN:nth-child(2)",
+      "watPath": "HTML > BODY:nth-child(2) > DIV:nth-child(5) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(4) > A:nth-child(1) > SPAN:nth-child(2)",
+      "optimal": ".ng-scope:nth-of-type(4) .admin-menu-link .ng-binding:nth-child(2)"
+    }
+  },
+  {
+    "type": "ClickAction",
+    "selector": {
+      "watId": "#admin-page > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(4) > A:nth-child(1) > SPAN:nth-child(2)",
+      "watPath": "HTML > BODY:nth-child(2) > DIV:nth-child(5) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(4) > A:nth-child(1) > SPAN:nth-child(2)",
+      "optimal": ".ng-scope:nth-of-type(4) .admin-menu-link .ng-binding:nth-child(2)"
+    }
+  },
+  {
+    "type": "ClickAction",
+    "selector": {
+      "watId": "#admin-page > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(4) > A:nth-child(1) > SPAN:nth-child(2)",
+      "watPath": "HTML > BODY:nth-child(2) > DIV:nth-child(5) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(4) > A:nth-child(1) > SPAN:nth-child(2)",
+      "optimal": ".ng-scope:nth-of-type(4) .admin-menu-link .ng-binding:nth-child(2)"
+    }
+  },
+  {
+    "type": "ClickAction",
+    "selector": {
+      "watId": "#admin-page > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(11) > A:nth-child(1) > SPAN:nth-child(2)",
+      "watPath": "HTML > BODY:nth-child(2) > DIV:nth-child(5) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(11) > A:nth-child(1) > SPAN:nth-child(2)",
+      "optimal": ".ng-scope:nth-of-type(11) .admin-menu-link .ng-binding:nth-child(2)"
+    }
+  },
+  {
+    "type": "ClickAction",
+    "selector": {
+      "watId": "#admin-page > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(11) > A:nth-child(1) > SPAN:nth-child(2)",
+      "watPath": "HTML > BODY:nth-child(2) > DIV:nth-child(5) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(11) > A:nth-child(1) > SPAN:nth-child(2)",
+      "optimal": ".ng-scope:nth-of-type(11) .admin-menu-link .ng-binding:nth-child(2)"
+    }
+  },
+  {
+    "type": "ClickAction",
+    "selector": {
+      "watId": "#admin-page > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(11) > A:nth-child(1) > SPAN:nth-child(2)",
+      "watPath": "HTML > BODY:nth-child(2) > DIV:nth-child(5) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(11) > A:nth-child(1) > SPAN:nth-child(2)",
+      "optimal": ".ng-scope:nth-of-type(11) .admin-menu-link .ng-binding:nth-child(2)"
+    }
+  },
+  {
+    "type": "ClickAction",
+    "selector": {
+      "watId": "#admin-page > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(11) > A:nth-child(1) > SPAN:nth-child(2)",
+      "watPath": "HTML > BODY:nth-child(2) > DIV:nth-child(5) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(11) > A:nth-child(1) > SPAN:nth-child(2)",
+      "optimal": ".ng-scope:nth-of-type(11) .admin-menu-link .ng-binding:nth-child(2)"
+    }
+  },
+  {
+    "type": "ClickAction",
+    "selector": {
+      "watId": "#admin-page > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(11) > A:nth-child(1) > SPAN:nth-child(2)",
+      "watPath": "HTML > BODY:nth-child(2) > DIV:nth-child(5) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(11) > A:nth-child(1) > SPAN:nth-child(2)",
+      "optimal": ".ng-scope:nth-of-type(11) .admin-menu-link .ng-binding:nth-child(2)"
+    }
+  }  
   
-  
-  {
-    "type": "ClickAction",
-    "selector": "#admin-page > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(2) > A:nth-child(1) > SPAN:nth-child(2)"
-  },
-  {
-    "type": "ClickAction",
-    "selector": "#admin-page > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(3) > A:nth-child(1) > SPAN:nth-child(2)"
-  },
-  {
-    "type": "ClickAction",
-    "selector": "#admin-page > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(4) > A:nth-child(1) > SPAN:nth-child(2)"
-  },
-  {
-    "type": "ClickAction",
-    "selector": "#admin-page > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(5) > A:nth-child(1) > SPAN:nth-child(2)"
-  },
-  {
-    "type": "ClickAction",
-    "selector": "#admin-page > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(6) > A:nth-child(1) > SPAN:nth-child(2)"
-  },
-  {
-    "type": "ClickAction",
-    "selector": "#admin-page > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(7) > A:nth-child(1) > SPAN:nth-child(2)"
-  },
-  {
-    "type": "ClickAction",
-    "selector": "#admin-page > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(8) > A:nth-child(1) > SPAN:nth-child(2)"
-  },
-  {
-    "type": "ClickAction",
-    "selector": "#admin-page > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(9) > A:nth-child(1)"
-  },
-  {
-    "type": "ClickAction",
-    "selector": "#admin-page > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(10) > A:nth-child(1) > SPAN:nth-child(2)"
-  },
-  {
-    "type": "ClickAction",
-    "selector": "#admin-page > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > DIV:nth-child(1) > UL:nth-child(1) > LI:nth-child(11) > A:nth-child(1) > SPAN:nth-child(2)"
-  },
-  {
-    "type":"WaitAction",
-    "ms":1000
-  }
 ]
