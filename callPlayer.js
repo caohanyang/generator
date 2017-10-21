@@ -4,17 +4,18 @@ const request = require('request');
 var pmongo = require('promised-mongo');
 const Promise = require('bluebird');
 const argv = require('yargs').argv;
+const ObjectID = require('mongodb').ObjectID;
 const serverNames = {
 	mongoServerName: argv.mongo
 }
 const dbUrl = `mongodb://${serverNames.mongoServerName}:27018/wat_storage`;
 
-
-function playBaseScenarios(dbUrl) {
+function sendScenarioRequests(dbUrl) {
 	winston.info(`Play Now Request on ${dbUrl}`);
 
 	return new Promise(function (resolve, reject) {
 		var db = pmongo(dbUrl);
+		var scenarioIdList = [];
 		db.scenario.find().toArray().then(function (founds) {
 			// docs is an array of all the documents in mycollection 
 			var req_num = 0;
@@ -34,21 +35,78 @@ function playBaseScenarios(dbUrl) {
 						request('http://localhost:8090/playNow/' + obj._id, function (error, response, body) {
 							if (!error) {
 								console.log("body" + body);
-								resolve();
+								scenarioIdList.push(obj._id);
+								resolve(obj._id);
 							}
 						});
 						req_num++;
 
-						console.log("111111")
-
 					}, 1000);
 				});
 			});
+
 		}).then(() => {
 			console.log("ffffff");
+			// console.log(scenarioIdList);
 			db.close();
-			resolve();
+			resolve(scenarioIdList);
 		});
+
+	})
+}
+
+
+function waitAllRuns(dbUrl, scenarioIdList) {
+	winston.info(`Play Now Request on ${dbUrl}`);
+
+	return new Promise(function (resolve, reject) {
+		var db = pmongo(dbUrl);
+
+		// generate object id list
+		var objectIdList = [];
+		for (var i = 0; i < scenarioIdList.length; i++) {
+			objectIdList.push(new ObjectID(scenarioIdList[i]));
+		}
+
+
+		var run_num = 0;
+		var runs;
+		return synchronousLoop(function () {
+			// Condition for stopping
+			return run_num < objectIdList.length;
+		}, function () {
+			// The function to run, should return a promise
+			return new Promise(function (resolve, reject) {
+				// Arbitrary 250ms async method to simulate async process
+				setTimeout(function () {
+
+					db.run.find({
+						sid: {
+							$in: objectIdList
+						}
+					}).toArray().then(function (founds) {
+						// docs is an array of all the documents in mycollection 
+						console.log("find " + founds.length + " runs.");
+						console.log(founds);
+
+						run_num = founds.length;
+						runs = founds;
+						db.close();
+						resolve();
+					}).catch(() => {
+						console.log("not yet find all runs");
+						run_num = 0;
+						reject("not yet find all runs");
+						db.close();
+					})
+				}, 5000);
+			});
+		}).then(() => {
+			console.log("finish run now");
+			
+			resolve(runs);
+		});;
+
 
 	})
 }
@@ -70,4 +128,5 @@ function synchronousLoop(condition, action) {
 };
 
 
-module.exports.playBaseScenarios = playBaseScenarios;
+module.exports.sendScenarioRequests = sendScenarioRequests;
+module.exports.waitAllRuns = waitAllRuns;

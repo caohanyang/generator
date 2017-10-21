@@ -19,7 +19,7 @@ var baseDelay = 1000;
 var scenarioDelay = 10000;
 
 const serverNames = {
-	mongoServerName : argv.mongo
+	mongoServerName: argv.mongo
 }
 
 const dbUrl = `mongodb://${serverNames.mongoServerName}:27018/wat_storage`;
@@ -34,75 +34,76 @@ database.write_base_scenario(dbUrl, scenario_base, (baseId) => {
 	var baseLength = scenario_base.actions.length;
 
 	// 2. generate base action
-	gen_base_actions(scenario_base).then(()=>{
+	gen_base_actions(scenario_base).then(() => {
 
 		console.log("===========step 2===================");
 		console.log("Done write base actions");
 		console.log("start to generate candidate actions");
-			
-		scenarioDelay =  baseLength * 1000;
 
-		return synchronousLoop(function() {
-					// Condition for stopping
-					return can_num < baseLength - 1;
-				}, function() {
-					// The function to run, should return a promise
-					return new Promise(function(resolve, reject) {
-						// Arbitrary 250ms async method to simulate async process
-						setTimeout(function() {
-							can_num++;
-							// Print out the sum thus far to show progress
-							gen_candi_actions(baseId, can_num)
-				
-							resolve();
-						}, scenarioDelay);
-					});
-				});
+		scenarioDelay = baseLength * 1000;
 
-	}).then(function() {
+		// return synchronousLoop(function () {
+		// 	// Condition for stopping
+		// 	return can_num < baseLength - 1;
+		// }, function () {
+		// 	// The function to run, should return a promise
+		// 	return new Promise(function (resolve, reject) {
+		// 		// Arbitrary 250ms async method to simulate async process
+		// 		setTimeout(function () {
+		// 			can_num++;
+		// 			// Print out the sum thus far to show progress
+		// 			gen_candi_actions(baseId, can_num)
+
+		// 			resolve();
+		// 		}, scenarioDelay);
+		// 	});
+		// });
+
+	}).then(function () {
 		console.log("===========step 3===================");
 		console.log("Done generate all actions");
 		console.log("start to generate length for new scenario");
 
 		var effectBaseLength = baseLength - safeStart;
-		var increaseLength = Math.round(Math.random()*effectBaseLength);
-		while(increaseLength === 0) {
-			increaseLength = Math.round(Math.random()*effectBaseLength);
+		var increaseLength = Math.round(Math.random() * effectBaseLength);
+		while (increaseLength === 0) {
+			increaseLength = Math.round(Math.random() * effectBaseLength);
 		}
 		console.log(increaseLength);
 
 		return increaseLength;
-	}).then((increaseLength)=> {
+	}).then((increaseLength) => {
 		console.log("===========step 4===================");
 		console.log("generate location for new scenario");
-		
-		var availablelist = numberArrayGenerator(safeStart, baseLength-1);
+
+		var availablelist = numberArrayGenerator(safeStart, baseLength - 1);
 
 		var allPermutation = Combinatorics.combination(availablelist, increaseLength).toArray();
-	   
+
 		var randomLocation = allPermutation[Math.floor(Math.random() * allPermutation.length)];
 		console.log(randomLocation);
 
-		
-	}).then(()=> {
+
+	}).then(() => {
 		console.log("===========step 5===================");
 		console.log("generate probability for each actions");
 		console.log("===========step 6===================");
 		console.log("generate test scenarios");
-	}).then(()=> {
+	}).then(() => {
 		console.log("===========step 7===================");
 		console.log("put all pre_scenarios to play");
-		
-		return callPlayer.playBaseScenarios(dbUrl);
-	}).then(()=> {
+
+		return callPlayer.sendScenarioRequests(dbUrl);
+	}).then((scenarioIdList) => {
 		console.log("===========step 8===================");
 		console.log("Wait until all the runs finish");
-		
-	}).then(()=> {
-		console.log("finish all 111");
+		console.log(scenarioIdList);
+		return callPlayer.waitAllRuns(dbUrl, scenarioIdList);
+	}).then((data) => {
+		console.log("===========step 9===================");
+		console.log("handle all runs results");
+		console.log(data);
 	})
-	
-	
 
 });
 
@@ -110,7 +111,7 @@ database.write_base_scenario(dbUrl, scenario_base, (baseId) => {
 function synchronousLoop(condition, action) {
 	var resolver = Promise.defer();
 
-	var loop = function() {
+	var loop = function () {
 		if (!condition()) return resolver.resolve();
 		return Promise.cast(action())
 			.then(loop)
@@ -130,24 +131,24 @@ function gen_base_actions(scenario_base) {
 	// And below is a sample usage of this promiseWhile function
 	var sum = 0,
 		stop = scenario_base.actions.length;
-	
-	return synchronousLoop(function() {
+
+	return synchronousLoop(function () {
 		// Condition for stopping
 		return sum < stop;
-	}, function() {
+	}, function () {
 		// The function to run, should return a promise
-		return new Promise(function(resolve, reject) {
+		return new Promise(function (resolve, reject) {
 			// Arbitrary 250ms async method to simulate async process
-			setTimeout(function() {
+			setTimeout(function () {
 				sum++;
 				// Print out the sum thus far to show progress
-				console.log( "start to write base action" );
+				console.log("start to write base action");
 				var action = scenario_base.actions[sum];
 				database.write_base_action(dbUrl, action, (aid) => {
 					console.log(aid);
-					
+
 				});
-	
+
 				resolve();
 			}, baseDelay);
 		});
@@ -159,11 +160,11 @@ function gen_base_actions(scenario_base) {
 
 
 function gen_candi_actions(baseId, index) {
-	
-	var nightmare = new Nightmare({show:true});				
+
+	var nightmare = new Nightmare({ show: true });
 	var scenario = new wat_action.Scenario(scenario_str);
 	// scenario.actions.split(index+1,scenario_base.actions.length-index+1);	
-	var newActions = scenario.actions.slice(0,index+1);
+	var newActions = scenario.actions.slice(0, index + 1);
 	console.log("begin to crawl " + baseId + " " + index);
 	scenario.actions = newActions;
 	console.log(scenario.actions);
@@ -172,15 +173,15 @@ function gen_candi_actions(baseId, index) {
 	const wat_scenario = new wat_action.Scenario(wat_actions);
 
 	wat_scenario.attachTo(nightmare)
-	.url()
-	.end()
-	.then((url) => {
-		console.log(url);
-		crawl_action.crawl(dbUrl, url, baseId, index);
-	})
-	.catch ( (e) => {
-		winston.error(e);
-	});
+		.url()
+		.end()
+		.then((url) => {
+			console.log(url);
+			crawl_action.crawl(dbUrl, url, baseId, index);
+		})
+		.catch((e) => {
+			winston.error(e);
+		});
 
 }
 
@@ -201,9 +202,9 @@ function createWATScenario(scenario) {
 		if (action.selector) {
 			watAction.selector = action.selector[cssSelector];
 			if (actions.length
-			&& action.type === 'TypeAction'
-			&& actions[actions.length - 1].type === 'TypeAction'
-			&& actions[actions.length - 1].selector === action.selector[cssSelector]) {
+				&& action.type === 'TypeAction'
+				&& actions[actions.length - 1].type === 'TypeAction'
+				&& actions[actions.length - 1].selector === action.selector[cssSelector]) {
 				actions.pop();
 			}
 		}
@@ -212,7 +213,7 @@ function createWATScenario(scenario) {
 
 	if (wait > 0) {
 		var actionsWithWait = [];
-		for (let index = 0; index < actions.length ; index++) {
+		for (let index = 0; index < actions.length; index++) {
 			actionsWithWait.push(actions[index]);
 			actionsWithWait.push({
 				type: 'WaitAction',
