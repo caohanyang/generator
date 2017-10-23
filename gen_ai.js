@@ -17,7 +17,7 @@ const database = require('./database.js');
 var safeStart = 6
 var baseDelay = 1000;
 var candidateDelay = 10000;
-var scenarioDelay = 60000;
+var scenarioDelay = 30000;
 
 
 const serverNames = {
@@ -44,22 +44,22 @@ database.write_base_scenario(dbUrl, scenario_base, (baseId) => {
 
 		candidateDelay = baseLength * 1000;
 
-		return synchronousLoop(function () {
-			// Condition for stopping
-			return can_num < baseLength - 1;
-		}, function () {
-			// The function to run, should return a promise
-			return new Promise(function (resolve, reject) {
-				// Arbitrary 250ms async method to simulate async process
-				setTimeout(function () {
-					can_num++;
-					// Print out the sum thus far to show progress
-					gen_candi_actions(baseId, can_num)
+		// return synchronousLoop(function () {
+		// 	// Condition for stopping
+		// 	return can_num < baseLength - 1;
+		// }, function () {
+		// 	// The function to run, should return a promise
+		// 	return new Promise(function (resolve, reject) {
+		// 		// Arbitrary 250ms async method to simulate async process
+		// 		setTimeout(function () {
+		// 			can_num++;
+		// 			// Print out the sum thus far to show progress
+		// 			gen_candi_actions(baseId, can_num)
 
-					resolve();
-				}, candidateDelay);
-			});
-		});
+		// 			resolve();
+		// 		}, candidateDelay);
+		// 	});
+		// });
 
 	}).then((scenario_base)=> {
 		console.log("===========step 3 LOOP===================");
@@ -125,7 +125,14 @@ function gen_random_scenario(scenario_base, baseLength, loopNum) {
 	}).then(() => {
 		console.log("===========step 3.3 loop "+loopNum+"===================");
 		console.log("generate probability for each actions");
-		console.log("===========step 3.4===================");
+		// if (loopNum === 0) {
+		return	database.initStepTable(dbUrl);
+		// } else {
+		// 	database.calculateStepTable(dbUrl);
+		// }
+		
+	}).then(()=>{
+		console.log("===========step 3.4 loop "+loopNum+"===================");
 		console.log("generate test scenarios");
 	}).then(() => {
 		console.log("===========step 3.5 loop "+loopNum+"===================");
