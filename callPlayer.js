@@ -8,7 +8,6 @@ const ObjectID = require('mongodb').ObjectID;
 const serverNames = {
 	mongoServerName: argv.mongo
 }
-const dbUrl = `mongodb://${serverNames.mongoServerName}:27018/wat_storage`;
 var runWait = 5000;
 
 function sendScenarioRequests(dbUrl) {

@@ -13,6 +13,7 @@ const winston = require('winston');
 const crawl_action = require('./crawl_action.js');
 const callPlayer = require('./callPlayer.js');
 const database = require('./database.js');
+const calculator = require('./cal_probability.js');
 
 var safeStart = 6
 var baseDelay = 1000;
@@ -125,15 +126,16 @@ function gen_random_scenario(scenario_base, baseLength, loopNum) {
 	}).then(() => {
 		console.log("===========step 3.3 loop "+loopNum+"===================");
 		console.log("generate probability for each actions");
-		// if (loopNum === 0) {
-		return	database.initStepTable(dbUrl);
-		// } else {
-		// 	database.calculateStepTable(dbUrl);
-		// }
+		if (loopNum === 0) {
+		    return database.initStepTable(dbUrl);
+		} else {
+			return calculator.calculatePro(dbUrl);
+		}
 		
-	}).then(()=>{
+	}).then((pList)=>{
 		console.log("===========step 3.4 loop "+loopNum+"===================");
 		console.log("generate test scenarios");
+		console.log(pList);
 	}).then(() => {
 		console.log("===========step 3.5 loop "+loopNum+"===================");
 		console.log("put all pre_scenarios to play");

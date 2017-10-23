@@ -1,4 +1,3 @@
-
 const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
 var winston = require('winston');
@@ -453,4 +452,3 @@ module.exports.read_candidate_collection = read_candidate_collection;
 module.exports.read_result_collection = read_result_collection;
 module.exports.write_final_action = write_final_action;
 module.exports.initStepTable = initStepTable;
-// module.exports.calculateStepTable=calculateStepTable;
