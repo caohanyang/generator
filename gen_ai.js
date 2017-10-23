@@ -16,7 +16,9 @@ const database = require('./database.js');
 
 var safeStart = 6
 var baseDelay = 1000;
-var scenarioDelay = 10000;
+var candidateDelay = 10000;
+var scenarioDelay = 60000;
+
 
 const serverNames = {
 	mongoServerName: argv.mongo
@@ -36,44 +38,80 @@ database.write_base_scenario(dbUrl, scenario_base, (baseId) => {
 	// 2. generate base action
 	gen_base_actions(scenario_base).then(() => {
 
-		console.log("===========step 2===================");
+		console.log("===========step 2 CANDIDATE ACTIONS===================");
 		console.log("Done write base actions");
 		console.log("start to generate candidate actions");
 
-		scenarioDelay = baseLength * 1000;
+		candidateDelay = baseLength * 1000;
 
-		// return synchronousLoop(function () {
-		// 	// Condition for stopping
-		// 	return can_num < baseLength - 1;
-		// }, function () {
-		// 	// The function to run, should return a promise
-		// 	return new Promise(function (resolve, reject) {
-		// 		// Arbitrary 250ms async method to simulate async process
-		// 		setTimeout(function () {
-		// 			can_num++;
-		// 			// Print out the sum thus far to show progress
-		// 			gen_candi_actions(baseId, can_num)
+		return synchronousLoop(function () {
+			// Condition for stopping
+			return can_num < baseLength - 1;
+		}, function () {
+			// The function to run, should return a promise
+			return new Promise(function (resolve, reject) {
+				// Arbitrary 250ms async method to simulate async process
+				setTimeout(function () {
+					can_num++;
+					// Print out the sum thus far to show progress
+					gen_candi_actions(baseId, can_num)
 
-		// 			resolve();
-		// 		}, scenarioDelay);
-		// 	});
-		// });
+					resolve();
+				}, candidateDelay);
+			});
+		});
 
-	}).then(function () {
-		console.log("===========step 3===================");
+	}).then((scenario_base)=> {
+		console.log("===========step 3 LOOP===================");
+		console.log("Loop to generate scenarios");
+		var loopNum = 0;
+		return synchronousLoop(function () {
+			// Condition for stopping
+			return loopNum < 3;
+		}, function () {
+			// The function to run, should return a promise
+			return new Promise(function (resolve, reject) {
+				// Arbitrary 250ms async method to simulate async process
+				setTimeout(function () {
+
+					loopNum++;
+					console.log("wait seconds to execute");
+					gen_random_scenario(scenario_base, baseLength, loopNum).then(()=>{
+						//finish loop
+						console.log("===========finsish loop "+loopNum+"===================");
+						resolve();
+					});
+					
+				}, scenarioDelay);
+			});
+		});
+
+	}).then(()=>{
+		console.log("===========finish all steps===================");
+	})
+	
+});
+
+
+function gen_random_scenario(scenario_base, baseLength, loopNum) {
+
+	return new Promise((resolve, reject)=>{
+
+		console.log("===========step 3.1 loop "+loopNum+"===================");
 		console.log("Done generate all actions");
 		console.log("start to generate length for new scenario");
-
+		
 		var effectBaseLength = baseLength - safeStart;
 		var increaseLength = Math.round(Math.random() * effectBaseLength);
 		while (increaseLength === 0) {
 			increaseLength = Math.round(Math.random() * effectBaseLength);
 		}
-		console.log(increaseLength);
+		console.log("increaseLength: " + increaseLength);
 
-		return increaseLength;
+		return resolve(increaseLength);
+
 	}).then((increaseLength) => {
-		console.log("===========step 4===================");
+		console.log("===========step 3.2 loop "+loopNum+"===================");
 		console.log("generate location for new scenario");
 
 		var availablelist = numberArrayGenerator(safeStart, baseLength - 1);
@@ -85,47 +123,31 @@ database.write_base_scenario(dbUrl, scenario_base, (baseId) => {
 
 
 	}).then(() => {
-		console.log("===========step 5===================");
+		console.log("===========step 3.3 loop "+loopNum+"===================");
 		console.log("generate probability for each actions");
-		console.log("===========step 6===================");
+		console.log("===========step 3.4===================");
 		console.log("generate test scenarios");
 	}).then(() => {
-		console.log("===========step 7===================");
+		console.log("===========step 3.5 loop "+loopNum+"===================");
 		console.log("put all pre_scenarios to play");
 
 		return callPlayer.sendScenarioRequests(dbUrl);
 	}).then((scenarioIdList) => {
-		console.log("===========step 8===================");
+		console.log("===========step 3.6 loop "+loopNum+"===================");
 		console.log("Wait until all the runs finish");
 		console.log(scenarioIdList);
 		return callPlayer.waitAllRuns(dbUrl, scenarioIdList);
 	}).then((data) => {
-		console.log("===========step 9===================");
+		console.log("===========step 3.7 loop "+loopNum+"===================");
 		console.log("handle all runs results");
 		console.log(data);
 	})
+}
 
-});
-
-
-function synchronousLoop(condition, action) {
-	var resolver = Promise.defer();
-
-	var loop = function () {
-		if (!condition()) return resolver.resolve();
-		return Promise.cast(action())
-			.then(loop)
-			.catch(resolver.reject);
-	};
-
-	process.nextTick(loop);
-
-	return resolver.promise;
-};
 
 function gen_base_actions(scenario_base) {
 
-	console.log("===========step 1===================");
+	console.log("===========step 1 BASE ACTIONS===================");
 	console.log("generate actions for base scenario ");
 
 	// And below is a sample usage of this promiseWhile function
@@ -227,5 +249,18 @@ function createWATScenario(scenario) {
 }
 
 
+function synchronousLoop(condition, action) {
+	var resolver = Promise.defer();
 
+	var loop = function () {
+		if (!condition()) return resolver.resolve();
+		return Promise.cast(action())
+			.then(loop)
+			.catch(resolver.reject);
+	};
+
+	process.nextTick(loop);
+
+	return resolver.promise;
+};
 

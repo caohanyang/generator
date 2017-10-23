@@ -74,7 +74,7 @@ function waitAllRuns(dbUrl, scenarioIdList) {
 		var runs;
 		return synchronousLoop(function () {
 			// Condition for stopping
-			console.log(run_num);
+			console.log("run_num: "+run_num);
 			return run_num < objectIdList.length;
 		}, function () {
 			// The function to run, should return a promise
