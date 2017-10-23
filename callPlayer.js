@@ -9,6 +9,7 @@ const serverNames = {
 	mongoServerName: argv.mongo
 }
 const dbUrl = `mongodb://${serverNames.mongoServerName}:27018/wat_storage`;
+var runWait = 5000;
 
 function sendScenarioRequests(dbUrl) {
 	winston.info(`Play Now Request on ${dbUrl}`);
@@ -46,7 +47,7 @@ function sendScenarioRequests(dbUrl) {
 			});
 
 		}).then(() => {
-			console.log("ffffff");
+			console.log("finish send all requests");
 			// console.log(scenarioIdList);
 			db.close();
 			resolve(scenarioIdList);
@@ -73,18 +74,33 @@ function waitAllRuns(dbUrl, scenarioIdList) {
 		var runs;
 		return synchronousLoop(function () {
 			// Condition for stopping
+			console.log(run_num);
 			return run_num < objectIdList.length;
 		}, function () {
 			// The function to run, should return a promise
 			return new Promise(function (resolve, reject) {
-				// Arbitrary 250ms async method to simulate async process
+
+				// Arbitrary 5000ms async method to simulate async process
 				setTimeout(function () {
 
-					db.run.find({
-						sid: {
-							$in: objectIdList
+					// get first elements for ids in objectIdList
+					db.run.aggregate(
+						{
+							$match:
+							{ 'sid': { $in: objectIdList } }
+						},
+						{
+							$group:
+							{
+								_id: "$sid",
+								uid: { $first: "$uid" },
+								isSuccess: { $first: "$isSuccess" },
+								read: { $first: "$read" },
+								date: { $first: "$date" }
+							}
 						}
-					}).toArray().then(function (founds) {
+					)
+					.then(function (founds) {
 						// docs is an array of all the documents in mycollection 
 						console.log("find " + founds.length + " runs.");
 						console.log(founds);
@@ -99,11 +115,12 @@ function waitAllRuns(dbUrl, scenarioIdList) {
 						reject("not yet find all runs");
 						db.close();
 					})
-				}, 5000);
+
+				}, runWait);
 			});
 		}).then(() => {
 			console.log("finish run now");
-			
+
 			resolve(runs);
 		});;
 
