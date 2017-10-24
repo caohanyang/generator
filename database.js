@@ -226,6 +226,9 @@ function initStepTable(dbUrl) {
 
 function write_noise_scenario(dbUrl, scenario_noise, cid, flag) {
 	winston.info(`Save noise scenario in ${dbUrl}`);
+
+	return new Promise((resolve, reject) => {
+
 	MongoClient.connect(dbUrl)
 		.then(db => {
 			db.collection('scenario', (err, noiseCollection) => {
@@ -262,9 +265,11 @@ function write_noise_scenario(dbUrl, scenario_noise, cid, flag) {
 					noiseCollection.save(noiseScenario)
 						.then(() => {
 							winston.info("Success to save noise scenario " + flag);
+							resolve();
 							db.close();
 						}).catch(err => {
 							winston.error(err);
+							reject();
 							db.close();
 						})
 				}
@@ -274,6 +279,8 @@ function write_noise_scenario(dbUrl, scenario_noise, cid, flag) {
 		}).catch(err => {
 			winston.info(err);
 		});
+
+	})
 }
 
 

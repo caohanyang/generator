@@ -19,7 +19,7 @@ var safeStart = 6
 var baseDelay = 1000;
 var candidateDelay = 10000;
 var scenarioDelay = 30000;
-
+var loopMax = 2
 
 const serverNames = {
 	mongoServerName: argv.mongo
@@ -68,7 +68,7 @@ database.write_base_scenario(dbUrl, scenario_base, (baseId) => {
 		var loopNum = 0;
 		return synchronousLoop(function () {
 			// Condition for stopping
-			return loopNum < 3;
+			return loopNum < loopMax;
 		}, function () {
 			// The function to run, should return a promise
 			return new Promise(function (resolve, reject) {
@@ -77,7 +77,7 @@ database.write_base_scenario(dbUrl, scenario_base, (baseId) => {
 
 					loopNum++;
 					console.log("wait seconds to execute");
-					gen_random_scenario(scenario_base, baseLength, loopNum).then(()=>{
+					gen_random_scenario(baseLength, loopNum).then(()=>{
 						//finish loop
 						console.log("===========finsish loop "+loopNum+"===================");
 						resolve();
@@ -94,7 +94,9 @@ database.write_base_scenario(dbUrl, scenario_base, (baseId) => {
 });
 
 
-function gen_random_scenario(scenario_base, baseLength, loopNum) {
+function gen_random_scenario(baseLength, loopNum) {
+
+	let increaseLength, randomLocation;
 
 	return new Promise((resolve, reject)=>{
 
@@ -103,15 +105,15 @@ function gen_random_scenario(scenario_base, baseLength, loopNum) {
 		console.log("start to generate length for new scenario");
 		
 		var effectBaseLength = baseLength - safeStart;
-		var increaseLength = Math.round(Math.random() * effectBaseLength);
+		increaseLength = Math.round(Math.random() * effectBaseLength);
 		while (increaseLength === 0) {
 			increaseLength = Math.round(Math.random() * effectBaseLength);
 		}
 		console.log("increaseLength: " + increaseLength);
 
-		return resolve(increaseLength);
+		return resolve();
 
-	}).then((increaseLength) => {
+	}).then(() => {
 		console.log("===========step 3.2 loop "+loopNum+"===================");
 		console.log("generate location for new scenario");
 
@@ -119,7 +121,7 @@ function gen_random_scenario(scenario_base, baseLength, loopNum) {
 
 		var allPermutation = Combinatorics.combination(availablelist, increaseLength).toArray();
 
-		var randomLocation = allPermutation[Math.floor(Math.random() * allPermutation.length)];
+		randomLocation = allPermutation[Math.floor(Math.random() * allPermutation.length)];
 		console.log(randomLocation);
 
 
@@ -127,15 +129,17 @@ function gen_random_scenario(scenario_base, baseLength, loopNum) {
 		console.log("===========step 3.3 loop "+loopNum+"===================");
 		console.log("generate probability for each actions");
 		if (loopNum === 0) {
-		    return database.initStepTable(dbUrl);
-		} else {
-			return calculator.calculatePro(dbUrl);
-		}
+		    database.initStepTable(dbUrl);
+		} 
+
+		return calculator.calculatePro(dbUrl);
+		
 		
 	}).then((pList)=>{
 		console.log("===========step 3.4 loop "+loopNum+"===================");
 		console.log("generate test scenarios");
-		console.log(pList);
+		return calculator.getNextScenarios(dbUrl, scenario_str, pList, randomLocation)
+		
 	}).then(() => {
 		console.log("===========step 3.5 loop "+loopNum+"===================");
 		console.log("put all pre_scenarios to play");

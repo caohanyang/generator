@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "array-shuffle": "^1.0.1",
     "assert": "^1.4.1",
     "bluebird": "^3.5.1",
     "fs": "0.0.1-security",
