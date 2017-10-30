@@ -5,50 +5,44 @@ var pmongo = require('promised-mongo');
 const Promise = require('bluebird');
 const argv = require('yargs').argv;
 const ObjectID = require('mongodb').ObjectID;
-const serverNames = {
-	mongoServerName: argv.mongo
-}
+
 var runWait = 5000;
 
-function sendScenarioRequests(dbUrl) {
+function sendScenarioRequests(dbUrl, sidList) {
 	winston.info(`Play Now Request on ${dbUrl}`);
 
 	return new Promise(function (resolve, reject) {
 		var db = pmongo(dbUrl);
 		var scenarioIdList = [];
-		db.scenario.find().toArray().then(function (founds) {
-			// docs is an array of all the documents in mycollection 
-			var req_num = 0;
 
-			return synchronousLoop(function () {
-				// Condition for stopping
-				return req_num < founds.length;
-			}, function () {
-				// The function to run, should return a promise
-				return new Promise(function (resolve, reject) {
-					// Arbitrary 250ms async method to simulate async process
-					setTimeout(function () {
+		// docs is an array of all the documents in mycollection 
+		var req_num = 0;
 
-						var obj = founds[req_num];
-						console.log(obj._id);
+		return synchronousLoop(function () {
+			// Condition for stopping
+			return req_num < sidList.length;
+		}, function () {
+			// The function to run, should return a promise
+			return new Promise(function (resolve, reject) {
+				// Arbitrary 250ms async method to simulate async process
+				setTimeout(function () {
 
-						request('http://localhost:8090/playNow/' + obj._id, function (error, response, body) {
-							if (!error) {
-								console.log("body" + body);
-								scenarioIdList.push(obj._id);
-								resolve(obj._id);
-							}
-						});
-						req_num++;
+					var obj = sidList[req_num];
+					console.log(obj);
 
-					}, 1000);
-				});
+					request('http://localhost:8090/playNow/' + obj, function (error, response, body) {
+						if (!error) {
+							console.log("body" + body);
+							scenarioIdList.push(obj);
+							resolve(obj);
+						}
+					});
+					req_num++;
+
+				}, 1000);
 			});
-
 		}).then(() => {
 			console.log("finish send all requests");
-			// console.log(scenarioIdList);
-			db.close();
 			resolve(scenarioIdList);
 		});
 
@@ -65,7 +59,13 @@ function waitAllRuns(dbUrl, scenarioIdList) {
 		// generate object id list
 		var objectIdList = [];
 		for (var i = 0; i < scenarioIdList.length; i++) {
-			objectIdList.push(new ObjectID(scenarioIdList[i]));
+			console.log(typeof scenarioIdList[i]);
+			console.log(typeof scenarioIdList[i].toString());
+			var id = new ObjectID(scenarioIdList[i].toString());
+			console.log(id);
+			// console.log(id.isValid());
+			// console.log(scenarioIdList[i].valueOf())
+			objectIdList.push(id);
 		}
 
 
@@ -73,7 +73,7 @@ function waitAllRuns(dbUrl, scenarioIdList) {
 		var runs;
 		return synchronousLoop(function () {
 			// Condition for stopping
-			console.log("run_num: "+run_num);
+			console.log("run_num: " + run_num);
 			return run_num < objectIdList.length;
 		}, function () {
 			// The function to run, should return a promise
@@ -83,38 +83,35 @@ function waitAllRuns(dbUrl, scenarioIdList) {
 				setTimeout(function () {
 
 					// get first elements for ids in objectIdList
-					db.run.aggregate(
-						{
-							$match:
-							{ 'sid': { $in: objectIdList } }
-						}
-						// group the ids
-						// {
-						// 	$group:
-						// 	{
-						// 		_id: "$sid",
-						// 		uid: { $first: "$uid" },
-						// 		isSuccess: { $first: "$isSuccess" },
-						// 		read: { $first: "$read" },
-						// 		date: { $first: "$date" }
-						// 	}
-						// }
-					)
-					.then(function (founds) {
-						// docs is an array of all the documents in mycollection 
-						console.log("find " + founds.length + " runs.");
-						console.log(founds);
+					MongoClient.connect(dbUrl)
+						.then(db => {
+							db.collection('run', (err, runCollection) => {
+								if (err) {
+									db.close();
+									winston.error(err);
+								} else {
+									runCollection.find({ sid: { $in: objectIdList } }).toArray()
+										.then(function (founds) {
+											// docs is an array of all the documents in mycollection 
+											console.log("find " + founds.length + " runs.");
+											console.log(founds);
 
-						run_num = founds.length;
-						runs = founds;
-						db.close();
-						resolve();
-					}).catch(() => {
-						console.log("not yet find all runs");
-						run_num = 0;
-						reject("not yet find all runs");
-						db.close();
-					})
+											run_num = founds.length;
+											runs = founds;
+											db.close();
+											resolve();
+										}).catch((err) => {
+											console.log(err);
+											console.log("not yet find all runs");
+											run_num = 0;
+											reject("not yet find all runs");
+											db.close();
+										})
+								}
+							});
+						}).catch(err => {
+							winston.error(err);
+						});
 
 				}, runWait);
 			});

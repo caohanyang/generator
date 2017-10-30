@@ -46,22 +46,22 @@ database.write_base_scenario(dbUrl, scenario_base, (baseId) => {
 
 		candidateDelay = baseLength * 1000;
 
-		return synchronousLoop(function () {
-			// Condition for stopping
-			return can_num < baseLength - 1;
-		}, function () {
-			// The function to run, should return a promise
-			return new Promise(function (resolve, reject) {
-				// Arbitrary 250ms async method to simulate async process
-				setTimeout(function () {
-					can_num++;
-					// Print out the sum thus far to show progress
-					gen_candi_actions(baseId, can_num)
+		// return synchronousLoop(function () {
+		// 	// Condition for stopping
+		// 	return can_num < baseLength - 1;
+		// }, function () {
+		// 	// The function to run, should return a promise
+		// 	return new Promise(function (resolve, reject) {
+		// 		// Arbitrary 250ms async method to simulate async process
+		// 		setTimeout(function () {
+		// 			can_num++;
+		// 			// Print out the sum thus far to show progress
+		// 			gen_candi_actions(baseId, can_num)
 
-					resolve();
-				}, candidateDelay);
-			});
-		});
+		// 			resolve();
+		// 		}, candidateDelay);
+		// 	});
+		// });
 
 	}).then((scenario_base)=> {
 		console.log("===========step 3 LOOP===================");
@@ -76,12 +76,11 @@ database.write_base_scenario(dbUrl, scenario_base, (baseId) => {
 				// Arbitrary 250ms async method to simulate async process
 				setTimeout(function () {
 
-					loopNum++;
-
 					console.log("wait seconds to execute");
 					gen_random_scenario(baseLength, loopNum).then(()=>{
 						//finish loop
 						console.log("===========finsish loop "+loopNum+"===================");
+						loopNum++;
 						resolve();
 					});
 										
@@ -139,21 +138,36 @@ function gen_random_scenario(baseLength, loopNum) {
 		
 	}).then((pList)=>{
 		console.log("===========step 3.4 loop "+loopNum+"===================");
-		console.log("generate test scenarios");
-		return calculator.getNextScenarios(dbUrl, scenario_str, pList, randomLocation)
+		console.log("generate TF IO scenarios");
+		return calculator.getNextScenarios(dbUrl, scenario_str, pList, randomLocation, "TFIO")
+		
+	}).then((sidList) => {
+		console.log("===========step 3.5 loop "+loopNum+"===================");
+		console.log("put all TF IO scenarios to play");
+        console.log(sidList);
+		return callPlayer.sendScenarioRequests(dbUrl, sidList);
+	}).then((scenarioIdList) => {
+		console.log("===========step 3.6 loop "+loopNum+"===================");
+		console.log("Wait until all TF IO runs finish");
+		console.log(scenarioIdList);
+		return callPlayer.waitAllRuns(dbUrl, scenarioIdList);
+	}).then((pList)=>{
+		console.log("===========step 3.7 loop "+loopNum+"===================");
+		console.log("generate END scenarios");
+		return calculator.getNextScenarios(dbUrl, scenario_str, pList, randomLocation, "END")
 		
 	}).then(() => {
-		console.log("===========step 3.5 loop "+loopNum+"===================");
-		console.log("put all pre_scenarios to play");
+		console.log("===========step 3.8 loop "+loopNum+"===================");
+		console.log("put all END scenarios to play");
 
 		return callPlayer.sendScenarioRequests(dbUrl);
 	}).then((scenarioIdList) => {
-		console.log("===========step 3.6 loop "+loopNum+"===================");
-		console.log("Wait until all the runs finish");
+		console.log("===========step 3.9 loop "+loopNum+"===================");
+		console.log("Wait until all END runs finish");
 		console.log(scenarioIdList);
 		return callPlayer.waitAllRuns(dbUrl, scenarioIdList);
 	}).then((runs) => {
-		console.log("===========step 3.7 loop "+loopNum+"===================");
+		console.log("===========step 3.10 loop "+loopNum+"===================");
 		console.log("update all runs results");
 		// updator.updateStep(dbUrl);
 		// console.log(data);

@@ -52,7 +52,22 @@ function calculatePro(dbUrl) {
 }
 
 
-function getNextScenarios(dbUrl, scenario_str, pList, randomLocation) {
+function getNextScenarios(dbUrl, scenario_str, pList, randomLocation, flag) {
+
+    if (flag === "TFIO") {
+        return getTFIOScenarios(dbUrl, scenario_str, pList, randomLocation);
+    } else if (flag === "END") {
+        return getENDScenarios(dbUrl, scenario_str, pList, randomLocation);
+    }
+
+}
+
+
+function getENDScenarios(dbUrl, scenario_str, pList, randomLocation) {
+
+}
+
+function getTFIOScenarios(dbUrl, scenario_str, pList, randomLocation) {
     var selectNum = randomLocation.length;
 
     // shuffle the array first
@@ -63,34 +78,45 @@ function getNextScenarios(dbUrl, scenario_str, pList, randomLocation) {
 
     let noise_num = 0;
 
-    return synchronousLoop(function () {
-        // Condition for stopping
-        return noise_num < aList.length;
-    }, function () {
-        // The function to run, should return a promise
-        return new Promise(function (resolve, reject) {
-            // Arbitrary 250ms async method to simulate async process
-            setTimeout(function () {
 
-                var promiseList = [];
+    return new Promise((resolve, reject) => {
+        var sidList = [];
 
-                promiseList.push(gen_TF(dbUrl, scenario_str, aList[noise_num].action, randomLocation[noise_num], aList[noise_num].aid));
-                promiseList.push(gen_IO(dbUrl, scenario_str, aList[noise_num].action, randomLocation[noise_num], aList[noise_num].aid));
-                promiseList.push(gen_end(dbUrl, scenario_str, aList[noise_num].action, randomLocation[noise_num], aList[noise_num].aid));
+        return synchronousLoop(function () {
+            // Condition for stopping
+            return noise_num < aList.length;
+        }, function () {
+            // The function to run, should return a promise
+            return new Promise(function (resolve, reject) {
+                // Arbitrary 250ms async method to simulate async process
+                setTimeout(function () {
 
-                Promise.all(promiseList).then(() => {
-                    resolve();
-                    console.log("finish generate 3 scenarios for 1 action");
-                    noise_num++;
-                })
+                    var promiseList = [];
+
+                    promiseList.push(gen_TF(dbUrl, scenario_str, aList[noise_num].action, randomLocation[noise_num], aList[noise_num].aid).then((sid) => {
+                        sidList.push(sid);
+                    }));
+                    promiseList.push(gen_IO(dbUrl, scenario_str, aList[noise_num].action, randomLocation[noise_num], aList[noise_num].aid).then((sid) => {
+                        sidList.push(sid);
+                    }));
+
+                    Promise.all(promiseList).then(() => {
+                        resolve();
+                        console.log("finish generate scenarios for 1 action");
+                        noise_num++;
+                    })
 
 
-            }, 2000);
-        });
+                }, 2000);
+            });
+        }).then(()=>{
+            console.log("finish TF IO scenarios ");
+            //this is the resolve for upper promise
+            resolve(sidList);
+        })
+
     })
-
 }
-
 
 function calculate(stepItem, N) {
 
