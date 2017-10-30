@@ -157,6 +157,75 @@ function write_final_action(dbUrl, result) {
 		});
 }
 
+
+function write_update_step(dbUrl, result) {
+	winston.info(`Save final result in ${dbUrl}`);
+
+	return new Promise((resolve, reject) => {
+	MongoClient.connect(dbUrl)
+		.then(db => {
+			db.collection('step', (err, finalCollection) => {
+				if (err) {
+					winston.error(err);
+					db.close();
+				} else {
+
+					// create new action item
+					var finalItem = {};
+					finalItem.aid = result.aid;
+					finalItem.action = result.action;
+
+					var newOne = null;
+					switch (result.type) {
+						case "FPCA": newOne = {
+							$set: finalItem,
+							$inc: { "FPCA": 1, "TPCA_OUT": 0, "TPCA_IN_TS": 0, "TPCA_IN_TF": 0 },
+							$push: { "cid": result._id, "FPCA_Scenario": result.EndScenario }
+						}; break;
+						case "TPCA_OUT": newOne = {
+							$set: finalItem,
+							$inc: { "FPCA": 0, "TPCA_OUT": 1, "TPCA_IN_TS": 0, "TPCA_IN_TF": 0 },
+							$push: { "cid": result._id, "TPCA_OUT_Scenario": result.EndScenario }
+						}; break;
+						case "TPCA_IN_TS": newOne = {
+							$set: finalItem,
+							$inc: { "FPCA": 0, "TPCA_OUT": 0, "TPCA_IN_TS": 1, "TPCA_IN_TF": 0 },
+							$push: { "cid": result._id, "TPCA_IN_TS_Scenario": result.EndScenario }
+						}; break;
+						case "TPCA_IN_TF": newOne = {
+							$set: finalItem,
+							$inc: { "FPCA": 0, "TPCA_OUT": 0, "TPCA_IN_TS": 0, "TPCA_IN_TF": 1 },
+							$push: { "cid": result._id, "TPCA_IN_TF_Scenario": result.EndScenario }
+						}; break;
+					}
+
+					// console.log(newOne);
+					// use findOneAndReplace to save unique action in action
+					finalCollection.findOneAndReplace(
+						{ 'aid': result.aid },
+						newOne,
+						{ upsert: true })
+						.then((actionOne) => {
+							winston.info("Success to save final action");
+							resolve();
+							db.close();
+						}).catch(err => {
+							winston.error(err);
+							reject();
+							db.close();
+						})
+
+				}
+			});
+
+		}).catch(err => {
+			winston.info(err);
+		});
+
+	})
+}
+
+
 function initStepTable(dbUrl) {
 	winston.info(`Initial Step in ${dbUrl}`);
 	return new Promise((resolve, reject) => {
@@ -450,6 +519,54 @@ function read_result_collection(dbUrl, callback) {
 		});
 }
 
+function read_step_collection(dbUrl, callback) {
+	winston.info(`Read step result in ${dbUrl}`);
+	MongoClient.connect(dbUrl)
+		.then(db => {
+			db.collection('candidate').aggregate([
+				{
+					$lookup: {
+						from: "scenario",
+						localField: "_id",
+						foreignField: "cid",
+						as: "scenario"
+					}
+				},
+
+				{ $unwind: "$scenario" },
+				{
+					$lookup: {
+						from: "run",
+						localField: "scenario._id",
+						foreignField: "sid",
+						as: "run"
+					}
+				},
+				{ $unwind: "$run" },
+				{
+					$group: {
+						_id: "$_id",
+						aid: { $addToSet: "$aid" },
+						flag: { $push: "$scenario.flag" },
+						result: { $push: "$run.isSuccess" },
+						action: { $addToSet: "$action" },
+						scenario: { $push: "$scenario.actions" }
+					}
+				},
+				{ $unwind: "$aid" }
+			], function (err, result) {
+				callback(result);
+
+				db.close();
+			});
+
+
+
+		}).catch(err => {
+			winston.info(err);
+		});
+}
+
 
 module.exports.write_base_scenario = write_base_scenario;
 module.exports.write_base_action = write_base_action;
@@ -459,3 +576,5 @@ module.exports.read_candidate_collection = read_candidate_collection;
 module.exports.read_result_collection = read_result_collection;
 module.exports.write_final_action = write_final_action;
 module.exports.initStepTable = initStepTable;
+module.exports.write_update_step = write_update_step;
+module.exports.read_step_collection = read_step_collection;

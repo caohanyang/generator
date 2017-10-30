@@ -92,7 +92,6 @@ function getNextScenarios(dbUrl, scenario_str, pList, randomLocation) {
 }
 
 
-
 function calculate(stepItem, N) {
 
     var a = 1 / N;
@@ -176,6 +175,7 @@ function synchronousLoop(condition, action) {
 function compare(a, b) {
     return b.probability - a.probability;
 };
+
 
 module.exports.calculatePro = calculatePro;
 module.exports.getNextScenarios = getNextScenarios;

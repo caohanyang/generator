@@ -87,17 +87,18 @@ function waitAllRuns(dbUrl, scenarioIdList) {
 						{
 							$match:
 							{ 'sid': { $in: objectIdList } }
-						},
-						{
-							$group:
-							{
-								_id: "$sid",
-								uid: { $first: "$uid" },
-								isSuccess: { $first: "$isSuccess" },
-								read: { $first: "$read" },
-								date: { $first: "$date" }
-							}
 						}
+						// group the ids
+						// {
+						// 	$group:
+						// 	{
+						// 		_id: "$sid",
+						// 		uid: { $first: "$uid" },
+						// 		isSuccess: { $first: "$isSuccess" },
+						// 		read: { $first: "$read" },
+						// 		date: { $first: "$date" }
+						// 	}
+						// }
 					)
 					.then(function (founds) {
 						// docs is an array of all the documents in mycollection 

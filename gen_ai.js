@@ -14,6 +14,7 @@ const crawl_action = require('./crawl_action.js');
 const callPlayer = require('./callPlayer.js');
 const database = require('./database.js');
 const calculator = require('./cal_probability.js');
+const updator = require('./update_res.js');
 
 var safeStart = 6
 var baseDelay = 1000;
@@ -45,22 +46,22 @@ database.write_base_scenario(dbUrl, scenario_base, (baseId) => {
 
 		candidateDelay = baseLength * 1000;
 
-		// return synchronousLoop(function () {
-		// 	// Condition for stopping
-		// 	return can_num < baseLength - 1;
-		// }, function () {
-		// 	// The function to run, should return a promise
-		// 	return new Promise(function (resolve, reject) {
-		// 		// Arbitrary 250ms async method to simulate async process
-		// 		setTimeout(function () {
-		// 			can_num++;
-		// 			// Print out the sum thus far to show progress
-		// 			gen_candi_actions(baseId, can_num)
+		return synchronousLoop(function () {
+			// Condition for stopping
+			return can_num < baseLength - 1;
+		}, function () {
+			// The function to run, should return a promise
+			return new Promise(function (resolve, reject) {
+				// Arbitrary 250ms async method to simulate async process
+				setTimeout(function () {
+					can_num++;
+					// Print out the sum thus far to show progress
+					gen_candi_actions(baseId, can_num)
 
-		// 			resolve();
-		// 		}, candidateDelay);
-		// 	});
-		// });
+					resolve();
+				}, candidateDelay);
+			});
+		});
 
 	}).then((scenario_base)=> {
 		console.log("===========step 3 LOOP===================");
@@ -76,13 +77,14 @@ database.write_base_scenario(dbUrl, scenario_base, (baseId) => {
 				setTimeout(function () {
 
 					loopNum++;
+
 					console.log("wait seconds to execute");
 					gen_random_scenario(baseLength, loopNum).then(()=>{
 						//finish loop
 						console.log("===========finsish loop "+loopNum+"===================");
 						resolve();
 					});
-					
+										
 				}, scenarioDelay);
 			});
 		});
@@ -150,10 +152,11 @@ function gen_random_scenario(baseLength, loopNum) {
 		console.log("Wait until all the runs finish");
 		console.log(scenarioIdList);
 		return callPlayer.waitAllRuns(dbUrl, scenarioIdList);
-	}).then((data) => {
+	}).then((runs) => {
 		console.log("===========step 3.7 loop "+loopNum+"===================");
-		console.log("handle all runs results");
-		console.log(data);
+		console.log("update all runs results");
+		// updator.updateStep(dbUrl);
+		// console.log(data);
 	})
 }
 
