@@ -67,11 +67,27 @@ function getNextScenarios(dbUrl, scenario_str, runList, randomLocation, flag) {
 function getENDScenarios(dbUrl, scenario_str, runList, randomLocation) {
     // first update TI step
     return updator.updateTIStep(dbUrl, runList).then((TIruns)=>{
-        console.log("heiheihei00");
+        // 1. generate end scenario
         console.log(TIruns);
+        var endList = findEndActions(TIruns);
+        console.log(endList);
+        // 2. update step
     });
     
 }
+
+function findEndActions(TIruns) {
+    var endList = [];
+    for (let i = 0; i< TIruns.length; i++) {
+        if (TIruns[i].scenario.flag === "TF" | TIruns[i].scenario.flag === "IO") {
+            if (TIruns[i].isSuccess === true) {
+                endList.push(TIruns[i]);
+            }
+        }
+    }
+    return endList;
+}
+
 
 function getTFIOScenarios(dbUrl, scenario_str, runList, randomLocation) {
     var selectNum = randomLocation.length;

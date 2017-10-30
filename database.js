@@ -551,7 +551,18 @@ function read_run_collection(dbUrl, runList) {
 					}
 				},
 
-				{ $unwind: "$scenario" }
+				{ $unwind: "$scenario" },
+
+				{
+					$lookup: {
+						from: "step",
+						localField: "scenario.cid",
+						foreignField: "aid",
+						as: "step"
+					}
+				},  
+                                
+                { $unwind: "$step" }   
 			], function (err, result) {
 				resolve(result);
 
