@@ -136,10 +136,10 @@ function gen_random_scenario(baseLength, loopNum) {
 		return calculator.calculatePro(dbUrl);
 		
 		
-	}).then((pList)=>{
+	}).then((runList)=>{
 		console.log("===========step 3.4 loop "+loopNum+"===================");
 		console.log("generate TF IO scenarios");
-		return calculator.getNextScenarios(dbUrl, scenario_str, pList, randomLocation, "TFIO")
+		return calculator.getNextScenarios(dbUrl, scenario_str, runList, randomLocation, "TFIO")
 		
 	}).then((sidList) => {
 		console.log("===========step 3.5 loop "+loopNum+"===================");
@@ -151,21 +151,21 @@ function gen_random_scenario(baseLength, loopNum) {
 		console.log("Wait until all TF IO runs finish");
 		console.log(scenarioIdList);
 		return callPlayer.waitAllRuns(dbUrl, scenarioIdList);
-	}).then((pList)=>{
+	}).then((runTI)=>{
 		console.log("===========step 3.7 loop "+loopNum+"===================");
 		console.log("generate END scenarios");
-		return calculator.getNextScenarios(dbUrl, scenario_str, pList, randomLocation, "END")
+		return calculator.getNextScenarios(dbUrl, scenario_str, runTI, randomLocation, "END")
 		
 	}).then(() => {
 		console.log("===========step 3.8 loop "+loopNum+"===================");
 		console.log("put all END scenarios to play");
 
-		return callPlayer.sendScenarioRequests(dbUrl);
+		// return callPlayer.sendScenarioRequests(dbUrl);
 	}).then((scenarioIdList) => {
 		console.log("===========step 3.9 loop "+loopNum+"===================");
 		console.log("Wait until all END runs finish");
 		console.log(scenarioIdList);
-		return callPlayer.waitAllRuns(dbUrl, scenarioIdList);
+		// return callPlayer.waitAllRuns(dbUrl, scenarioIdList);
 	}).then((runs) => {
 		console.log("===========step 3.10 loop "+loopNum+"===================");
 		console.log("update all runs results");

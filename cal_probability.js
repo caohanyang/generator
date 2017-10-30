@@ -8,6 +8,7 @@ const argv = require('yargs').argv;
 const ObjectID = require('mongodb').ObjectID;
 const arrayShuffle = require('array-shuffle');
 const database = require('./database.js');
+const updator = require('./update_res.js');
 
 function calculatePro(dbUrl) {
     winston.info(`Calculate probability Step table in ${dbUrl}`);
@@ -52,29 +53,34 @@ function calculatePro(dbUrl) {
 }
 
 
-function getNextScenarios(dbUrl, scenario_str, pList, randomLocation, flag) {
+function getNextScenarios(dbUrl, scenario_str, runList, randomLocation, flag) {
 
     if (flag === "TFIO") {
-        return getTFIOScenarios(dbUrl, scenario_str, pList, randomLocation);
+        return getTFIOScenarios(dbUrl, scenario_str, runList, randomLocation);
     } else if (flag === "END") {
-        return getENDScenarios(dbUrl, scenario_str, pList, randomLocation);
+        return getENDScenarios(dbUrl, scenario_str, runList, randomLocation);
     }
 
 }
 
 
-function getENDScenarios(dbUrl, scenario_str, pList, randomLocation) {
-
+function getENDScenarios(dbUrl, scenario_str, runList, randomLocation) {
+    // first update TI step
+    return updator.updateTIStep(dbUrl, runList).then((TIruns)=>{
+        console.log("heiheihei00");
+        console.log(TIruns);
+    });
+    
 }
 
-function getTFIOScenarios(dbUrl, scenario_str, pList, randomLocation) {
+function getTFIOScenarios(dbUrl, scenario_str, runList, randomLocation) {
     var selectNum = randomLocation.length;
 
     // shuffle the array first
     // sort the pList according to the probability
 
     //get the top selectNumber 
-    var aList = arrayShuffle(pList).sort(compare).splice(0, selectNum);
+    var aList = arrayShuffle(runList).sort(compare).splice(0, selectNum);
 
     let noise_num = 0;
 

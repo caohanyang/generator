@@ -11,35 +11,14 @@ var asyncLoop = require('node-async-loop');
 
 function updateStep(dbUrl) {
 
-	database.read_step_collection(dbUrl, (step_result) => {
-		console.log(step_result.length);
-
-		let step_num = 0;
-
-		return synchronousLoop(function () {
-			// Condition for stopping
-			return step_num < step_result.length;
-		}, function () {
-			// The function to run, should return a promise
-			return new Promise(function (resolve, reject) {
-				// Arbitrary 250ms async method to simulate async process
-				setTimeout(function () {
-
-					var final = gen_bugType(step_result[step_num])
-					console.log(final);
-					database.write_update_step(dbUrl, final).then(() => {
-						resolve();
-						step_num++;
-					});
-
-				}, 1000);
-			});
-		})
-
-	})
+	
 
 }
 
+function updateTIStep(dbUrl, runList) {
+
+	return database.read_run_collection(dbUrl, runList)
+}
 
 
 function gen_bugType(result) {
@@ -93,3 +72,4 @@ function gen_bugType(result) {
 
 module.exports.gen_bugType = gen_bugType;
 module.exports.updateStep = updateStep;
+module.exports.updateTIStep = updateTIStep;

@@ -59,15 +59,9 @@ function waitAllRuns(dbUrl, scenarioIdList) {
 		// generate object id list
 		var objectIdList = [];
 		for (var i = 0; i < scenarioIdList.length; i++) {
-			console.log(typeof scenarioIdList[i]);
-			console.log(typeof scenarioIdList[i].toString());
 			var id = new ObjectID(scenarioIdList[i].toString());
-			console.log(id);
-			// console.log(id.isValid());
-			// console.log(scenarioIdList[i].valueOf())
 			objectIdList.push(id);
 		}
-
 
 		var run_num = 0;
 		var runs;
