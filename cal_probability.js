@@ -65,26 +65,46 @@ function getNextScenarios(dbUrl, scenario_str, runList, randomLocation, flag) {
 
 
 function getENDScenarios(dbUrl, scenario_str, runList, randomLocation) {
-    // first update TI step
-    return updator.updateTIStep(dbUrl, runList).then((TIruns)=>{
-        // 1. generate end scenario
+
+    // 1. generate end scenario
+    return database.read_run_collection(dbUrl, runList).then((TIruns) => {
+
         console.log(TIruns);
         var endList = findEndActions(TIruns);
-        console.log(endList);
+        if (endList.length !== null) {
+            console.log("------end list-----------")
+            console.log(endList);
+            gen_END(dbUrl, scenario_str, endList);
+        }
         // 2. update step
     });
-    
+
 }
 
 function findEndActions(TIruns) {
     var endList = [];
-    for (let i = 0; i< TIruns.length; i++) {
-        if (TIruns[i].scenario.flag === "TF" | TIruns[i].scenario.flag === "IO") {
-            if (TIruns[i].isSuccess === true) {
-                endList.push(TIruns[i]);
+
+    for (let i = 0; i < TIruns.length; i++) {
+
+        var run = TIruns[i];
+
+        var gotoEnd = true;
+
+        for (let j = 0; j < run.isSuccess.length; j++) {
+            if (run.flag[j] === "TF" | run.flag[j] === "IO") {
+                if (run.isSuccess[j] === false) {
+                    gotoEnd = false;
+                }
             }
         }
+
+        if (gotoEnd) {
+            endList.push(run);
+        }
     }
+
+
+
     return endList;
 }
 
@@ -131,7 +151,7 @@ function getTFIOScenarios(dbUrl, scenario_str, runList, randomLocation) {
 
                 }, 2000);
             });
-        }).then(()=>{
+        }).then(() => {
             console.log("finish TF IO scenarios ");
             //this is the resolve for upper promise
             resolve(sidList);
@@ -167,7 +187,7 @@ function gen_TF(dbUrl, scenario_str, action, abid, aid) {
 
     var scenario_noise = new wat_action.Scenario(JSON.parse(scenarioJson));
 
-    return database.write_noise_scenario(dbUrl, scenario_noise, aid, "TF")
+    return database.write_noise_scenario(dbUrl, scenario_noise, abid, aid, "TF")
 
 }
 
@@ -184,22 +204,38 @@ function gen_IO(dbUrl, scenario_str, action, abid, aid) {
 
     var scenario_noise = new wat_action.Scenario(JSON.parse(scenarioJson));
 
-    return database.write_noise_scenario(dbUrl, scenario_noise, aid, "IO")
+    return database.write_noise_scenario(dbUrl, scenario_noise, abid, aid, "IO")
 
 }
 
-function gen_end(dbUrl, scenario_str, action, abid, aid, callback) {
+function gen_END(dbUrl, scenario_str, endList) {
+    
+    var abidList = [];
+    for (let i = 0; i < endList.length; i++){
+        abidList.push(endList[i].abid);
+    }
+
+    // sort the abidList
+    abidList.sort(function(a, b) {
+        return a - b;
+      });
+
+    // specify add locations
+    console.log(abidList);
 
     var scenario_base = new wat_action.Scenario(scenario_str);
-    scenario_base.actions.splice(abid + 1, 0, action);
+
+    for (let j = 0; j < abidList.length; j++) {
+        scenario_base.actions.splice(abidList[j] + j + 1, 0, endList[j].action);
+    }
 
     var scenarioJson = JSON.stringify(scenario_base.actions, null, 2);
 
-    //    console.log(scenarioJson);
+    console.log(scenarioJson);
 
     var scenario_noise = new wat_action.Scenario(JSON.parse(scenarioJson));
 
-    return database.write_noise_scenario(dbUrl, scenario_noise, aid, "END")
+    // return database.write_noise_scenario(dbUrl, scenario_noise, aid, "END")
 
 }
 

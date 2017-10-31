@@ -293,7 +293,7 @@ function initStepTable(dbUrl) {
 }
 
 
-function write_noise_scenario(dbUrl, scenario_noise, cid, flag) {
+function write_noise_scenario(dbUrl, scenario_noise, abid, cid, flag) {
 	winston.info(`Save noise scenario in ${dbUrl}`);
 
 	return new Promise((resolve, reject) => {
@@ -309,6 +309,7 @@ function write_noise_scenario(dbUrl, scenario_noise, cid, flag) {
 						var noiseScenario = {};
 						noiseScenario._id = ObjectID();
 						noiseScenario.cid = cid;
+						noiseScenario.abid = abid;
 						noiseScenario.flag = flag;
 						//set user id
 						// console.log(scenario_noise.actions);
@@ -550,9 +551,7 @@ function read_run_collection(dbUrl, runList) {
 						as: "scenario"
 					}
 				},
-
 				{ $unwind: "$scenario" },
-
 				{
 					$lookup: {
 						from: "step",
@@ -560,12 +559,24 @@ function read_run_collection(dbUrl, runList) {
 						foreignField: "aid",
 						as: "step"
 					}
-				},  
-                                
-                { $unwind: "$step" }   
+				},                      
+				{ $unwind: "$step" },
+				{
+					$group: {
+						_id: "$step.aid",
+						rid: { $push: "$_id" },
+						sid: { $push: "$sid" },
+						abid: { $addToSet: "$scenario.abid" },
+						flag: { $push: "$scenario.flag" },
+						isSuccess: { $push: "$isSuccess" },
+						action: { $addToSet: "$step.action" },
+						actions: { $push: "$scenario.actions" }
+					}
+				},
+				{ $unwind: "$action" } ,  
+				{ $unwind: "$abid" }  
 			], function (err, result) {
 				resolve(result);
-
 				db.close();
 			});
 

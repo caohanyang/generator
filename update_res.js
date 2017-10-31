@@ -15,11 +15,6 @@ function updateStep(dbUrl) {
 
 }
 
-function updateTIStep(dbUrl, runList) {
-
-	return database.read_run_collection(dbUrl, runList)
-}
-
 
 function gen_bugType(result) {
 	var TF, IO, END;
@@ -72,4 +67,3 @@ function gen_bugType(result) {
 
 module.exports.gen_bugType = gen_bugType;
 module.exports.updateStep = updateStep;
-module.exports.updateTIStep = updateTIStep;
