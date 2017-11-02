@@ -70,11 +70,21 @@ function getENDScenarios(dbUrl, scenario_str, runList, randomLocation) {
     return database.read_run_collection(dbUrl, runList).then((TIruns) => {
 
         console.log(TIruns);
+        var sidList = [];
         var endList = findEndActions(TIruns);
-        if (endList.length !== null) {
+        if (endList.length !== 0) {
             console.log("------end list-----------")
             console.log(endList);
-            gen_END(dbUrl, scenario_str, endList);
+            return new Promise((resolve, reject)=>{
+                gen_END(dbUrl, scenario_str, endList).then((sid)=>{
+                    sidList.push(sid);
+                    resolve(sidList);
+                });
+            })
+            
+        } else {
+            // endList is []
+            return endList;
         }
         // 2. update step
     });
@@ -98,9 +108,9 @@ function findEndActions(TIruns) {
             }
         }
 
-        if (gotoEnd) {
+        // if (gotoEnd) {
             endList.push(run);
-        }
+        // }
     }
 
 
@@ -211,8 +221,10 @@ function gen_IO(dbUrl, scenario_str, action, abid, aid) {
 function gen_END(dbUrl, scenario_str, endList) {
     
     var abidList = [];
+    var aidList = [];
     for (let i = 0; i < endList.length; i++){
         abidList.push(endList[i].abid);
+        aidList.push(endList[i]._id);
     }
 
     // sort the abidList
@@ -221,6 +233,7 @@ function gen_END(dbUrl, scenario_str, endList) {
       });
 
     // specify add locations
+    console.log(aidList);
     console.log(abidList);
 
     var scenario_base = new wat_action.Scenario(scenario_str);
@@ -235,7 +248,7 @@ function gen_END(dbUrl, scenario_str, endList) {
 
     var scenario_noise = new wat_action.Scenario(JSON.parse(scenarioJson));
 
-    // return database.write_noise_scenario(dbUrl, scenario_noise, aid, "END")
+    return database.write_noise_scenario(dbUrl, scenario_noise, abidList, aidList, "END")
 
 }
 

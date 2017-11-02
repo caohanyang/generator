@@ -156,16 +156,26 @@ function gen_random_scenario(baseLength, loopNum) {
 		console.log("generate END scenarios");
 		return calculator.getNextScenarios(dbUrl, scenario_str, runTI, randomLocation, "END")
 		
-	}).then(() => {
+	}).then((sidList) => {
 		console.log("===========step 3.8 loop "+loopNum+"===================");
-		console.log("put all END scenarios to play");
-
-		// return callPlayer.sendScenarioRequests(dbUrl);
+	
+		if (sidList.length === 0) {
+			console.log("No END scenario to play");
+			return sidList;
+		} else {
+			console.log("put all END scenarios to play");
+			return callPlayer.sendScenarioRequests(dbUrl,  sidList);
+		}
 	}).then((scenarioIdList) => {
 		console.log("===========step 3.9 loop "+loopNum+"===================");
 		console.log("Wait until all END runs finish");
 		console.log(scenarioIdList);
-		// return callPlayer.waitAllRuns(dbUrl, scenarioIdList);
+
+		if (scenarioIdList.length === 0) {
+			console.log("No END scenario to wait");	
+		} else {
+			return callPlayer.waitAllRuns(dbUrl, scenarioIdList);
+		}
 	}).then((runs) => {
 		console.log("===========step 3.10 loop "+loopNum+"===================");
 		console.log("update all runs results");

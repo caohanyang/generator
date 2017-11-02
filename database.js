@@ -308,7 +308,9 @@ function write_noise_scenario(dbUrl, scenario_noise, abid, cid, flag) {
 
 						var noiseScenario = {};
 						noiseScenario._id = ObjectID();
+						// cid can be element or array
 						noiseScenario.cid = cid;
+						// abid can be element or array
 						noiseScenario.abid = abid;
 						noiseScenario.flag = flag;
 						//set user id
