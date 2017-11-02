@@ -158,7 +158,7 @@ function write_final_action(dbUrl, result) {
 }
 
 
-function write_update_step(dbUrl, result) {
+function write_TI_step(dbUrl, result) {
 	winston.info(`Save final result in ${dbUrl}`);
 
 	return new Promise((resolve, reject) => {
@@ -226,7 +226,7 @@ function write_update_step(dbUrl, result) {
 }
 
 
-function initStepTable(dbUrl) {
+function init_step(dbUrl) {
 	winston.info(`Initial Step in ${dbUrl}`);
 	return new Promise((resolve, reject) => {
 
@@ -596,9 +596,9 @@ module.exports.write_base_scenario = write_base_scenario;
 module.exports.write_base_action = write_base_action;
 module.exports.write_noise_scenario = write_noise_scenario;
 module.exports.write_candidate_action = write_candidate_action;
+module.exports.write_final_action = write_final_action;
+module.exports.write_TI_step = write_TI_step;
 module.exports.read_candidate_collection = read_candidate_collection;
 module.exports.read_result_collection = read_result_collection;
-module.exports.write_final_action = write_final_action;
-module.exports.initStepTable = initStepTable;
-module.exports.write_update_step = write_update_step;
 module.exports.read_run_collection = read_run_collection;
+module.exports.init_step = init_step;

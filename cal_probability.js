@@ -66,15 +66,21 @@ function getNextScenarios(dbUrl, scenario_str, runList, randomLocation, flag) {
 
 function getENDScenarios(dbUrl, scenario_str, runList, randomLocation) {
 
-    // 1. generate end scenario
+    
     return database.read_run_collection(dbUrl, runList).then((TIruns) => {
 
         console.log(TIruns);
+        // 1. update step part 1: TFIO
+        updator.update_TFIO_step(dbUrl, TIruns);
+
+        // 2. generate end scenario
         var sidList = [];
         var endList = findEndActions(TIruns);
         if (endList.length !== 0) {
             console.log("------end list-----------")
             console.log(endList);
+            
+            
             return new Promise((resolve, reject)=>{
                 gen_END(dbUrl, scenario_str, endList).then((sid)=>{
                     sidList.push(sid);
@@ -233,7 +239,6 @@ function gen_END(dbUrl, scenario_str, endList) {
       });
 
     // specify add locations
-    console.log(aidList);
     console.log(abidList);
 
     var scenario_base = new wat_action.Scenario(scenario_str);
@@ -244,7 +249,7 @@ function gen_END(dbUrl, scenario_str, endList) {
 
     var scenarioJson = JSON.stringify(scenario_base.actions, null, 2);
 
-    console.log(scenarioJson);
+    // console.log(scenarioJson);
 
     var scenario_noise = new wat_action.Scenario(JSON.parse(scenarioJson));
 

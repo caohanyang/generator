@@ -20,7 +20,7 @@ var safeStart = 6
 var baseDelay = 1000;
 var candidateDelay = 10000;
 var scenarioDelay = 30000;
-var loopMax = 2
+var loopMax = 2;
 
 const serverNames = {
 	mongoServerName: argv.mongo
@@ -95,10 +95,15 @@ database.write_base_scenario(dbUrl, scenario_base, (baseId) => {
 });
 
 
+
+
+
+
 function gen_random_scenario(baseLength, loopNum) {
 
 	let increaseLength, randomLocation;
-
+	var sid_one_loop = [];
+	
 	return new Promise((resolve, reject)=>{
 
 		console.log("===========step 3.1 loop "+loopNum+"===================");
@@ -130,27 +135,27 @@ function gen_random_scenario(baseLength, loopNum) {
 		console.log("===========step 3.3 loop "+loopNum+"===================");
 		console.log("generate probability for each actions");
 		if (loopNum === 0) {
-		    database.initStepTable(dbUrl);
+		    database.init_step(dbUrl);
 		} 
-
 		return calculator.calculatePro(dbUrl);
 		
 		
-	}).then((runList)=>{
+	}).then((pList)=>{
 		console.log("===========step 3.4 loop "+loopNum+"===================");
 		console.log("generate TF IO scenarios");
-		return calculator.getNextScenarios(dbUrl, scenario_str, runList, randomLocation, "TFIO")
+		return calculator.getNextScenarios(dbUrl, scenario_str, pList, randomLocation, "TFIO")
 		
 	}).then((sidList) => {
 		console.log("===========step 3.5 loop "+loopNum+"===================");
 		console.log("put all TF IO scenarios to play");
+		sid_one_loop.push(sidList);
         console.log(sidList);
 		return callPlayer.sendScenarioRequests(dbUrl, sidList);
-	}).then((scenarioIdList) => {
+	}).then((ti_id_list) => {
 		console.log("===========step 3.6 loop "+loopNum+"===================");
 		console.log("Wait until all TF IO runs finish");
-		console.log(scenarioIdList);
-		return callPlayer.waitAllRuns(dbUrl, scenarioIdList);
+		console.log(ti_id_list);
+		return callPlayer.waitAllRuns(dbUrl, ti_id_list);
 	}).then((runTI)=>{
 		console.log("===========step 3.7 loop "+loopNum+"===================");
 		console.log("generate END scenarios");
@@ -164,22 +169,23 @@ function gen_random_scenario(baseLength, loopNum) {
 			return sidList;
 		} else {
 			console.log("put all END scenarios to play");
+			sid_one_loop.push(sidList);
 			return callPlayer.sendScenarioRequests(dbUrl,  sidList);
 		}
-	}).then((scenarioIdList) => {
+	}).then((end_id_list) => {
 		console.log("===========step 3.9 loop "+loopNum+"===================");
 		console.log("Wait until all END runs finish");
-		console.log(scenarioIdList);
+		console.log(end_id_list);
 
-		if (scenarioIdList.length === 0) {
+		if (end_id_list.length === 0) {
 			console.log("No END scenario to wait");	
 		} else {
-			return callPlayer.waitAllRuns(dbUrl, scenarioIdList);
+			return callPlayer.waitAllRuns(dbUrl, end_id_list);
 		}
-	}).then((runs) => {
+	}).then(() => {
 		console.log("===========step 3.10 loop "+loopNum+"===================");
 		console.log("update all runs results");
-		// updator.updateStep(dbUrl);
+		updator.update_step(dbUrl, sid_one_loop);
 		// console.log(data);
 	})
 }
@@ -218,8 +224,7 @@ function gen_base_actions(scenario_base) {
 	});
 
 }
-
-
+ 
 
 function gen_candi_actions(baseId, index) {
 

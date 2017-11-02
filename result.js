@@ -22,7 +22,7 @@ database.read_result_collection(dbUrl, (candi_result) => {
 
         var final = gen_bugType(candi_result[i])
 		// console.log(final);
-		database.write_final_action(dbUrl, final);
+		database.write_TI_step(dbUrl, final);
 
         i++;
         if( i < candi_result.length ){
