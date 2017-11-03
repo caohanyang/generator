@@ -159,7 +159,7 @@ function write_final_action(dbUrl, result) {
 
 
 function write_TI_step(dbUrl, result) {
-	winston.info(`Save final result in ${dbUrl}`);
+	winston.info(`Save final TFIO result in ${dbUrl}`);
 
 	return new Promise((resolve, reject) => {
 		MongoClient.connect(dbUrl)
@@ -224,6 +224,77 @@ function write_TI_step(dbUrl, result) {
 
 	})
 }
+
+
+function write_END_step(dbUrl, result) {
+	winston.info(`Save final END result in ${dbUrl}`);
+
+	return new Promise((resolve, reject) => {
+		MongoClient.connect(dbUrl)
+			.then(db => {
+				db.collection('step', (err, finalCollection) => {
+					if (err) {
+						winston.error(err);
+						db.close();
+					} else {
+
+						// create new action item
+						var finalItem = {};
+						finalItem.aid = result._id;
+						finalItem.action = result.action;
+
+						var newOne = null;
+						switch (result.type) {
+							case "FPCA": newOne = {
+								$set: finalItem,
+								$inc: { "FPCA": 1, "TPCA_OUT": 0, "TPCA_IN_TS": 0, "TPCA_IN_TF": 0 },
+								// $push: { "cid": result._id, "FPCA_Scenario": result.EndScenario }
+							}; break;
+							case "TPCA_OUT": newOne = {
+								$set: finalItem,
+								$inc: { "FPCA": 0, "TPCA_OUT": 1, "TPCA_IN_TS": 0, "TPCA_IN_TF": 0 },
+								// $push: { "cid": result._id, "TPCA_OUT_Scenario": result.EndScenario }
+							}; break;
+							case "TPCA_IN_TS": newOne = {
+								$set: finalItem,
+								$inc: { "FPCA": 0, "TPCA_OUT": 0, "TPCA_IN_TS": 1, "TPCA_IN_TF": 0 },
+								// $push: { "cid": result._id, "TPCA_IN_TS_Scenario": result.EndScenario }
+							}; break;
+							case "TPCA_IN_TF": newOne = {
+								$set: finalItem,
+								$inc: { "FPCA": 0, "TPCA_OUT": 0, "TPCA_IN_TS": 0, "TPCA_IN_TF": 1 },
+								// $push: { "cid": result._id, "TPCA_IN_TF_Scenario": result.EndScenario }
+							}; break;
+						}
+
+						// console.log(newOne);
+						// use findOneAndReplace to save unique action in action
+						finalCollection.findOneAndReplace(
+							{ 'aid': result._id },
+							newOne,
+							{ upsert: true })
+							.then((actionOne) => {
+								winston.info("Success to save final action");
+								resolve();
+								db.close();
+							}).catch(err => {
+								winston.error(err);
+								reject();
+								db.close();
+							})
+
+					}
+				});
+
+			}).catch(err => {
+				winston.info(err);
+			});
+
+	})
+}
+
+
+
 
 
 function init_step(dbUrl) {
@@ -531,62 +602,141 @@ function read_run_collection(dbUrl, runList) {
 		objectIdList.push(id);
 	}
 
-	return new Promise ((resolve, reject)=>{
+	return new Promise((resolve, reject) => {
 
-	
-	MongoClient.connect(dbUrl)
-		.then(db => {
-			db.collection('run').aggregate([
-				{
-					$match: {
-						'sid':
-						{
-							$in: objectIdList
+
+		MongoClient.connect(dbUrl)
+			.then(db => {
+				db.collection('run').aggregate([
+					{
+						$match: {
+							'sid':
+							{
+								$in: objectIdList
+							}
 						}
-					}
-				},
-				{
-					$lookup: {
-						from: "scenario",
-						localField: "sid",
-						foreignField: "_id",
-						as: "scenario"
-					}
-				},
-				{ $unwind: "$scenario" },
-				{
-					$lookup: {
-						from: "step",
-						localField: "scenario.cid",
-						foreignField: "aid",
-						as: "step"
-					}
-				},                      
-				{ $unwind: "$step" },
-				{
-					$group: {
-						_id: "$step.aid",
-						rid: { $push: "$_id" },
-						sid: { $push: "$sid" },
-						abid: { $addToSet: "$scenario.abid" },
-						flag: { $push: "$scenario.flag" },
-						isSuccess: { $push: "$isSuccess" },
-						action: { $addToSet: "$step.action" },
-						actions: { $push: "$scenario.actions" }
-					}
-				},
-				{ $unwind: "$action" } ,  
-				{ $unwind: "$abid" }  
-			], function (err, result) {
-				resolve(result);
-				db.close();
+					},
+					{
+						$lookup: {
+							from: "scenario",
+							localField: "sid",
+							foreignField: "_id",
+							as: "scenario"
+						}
+					},
+					{ $unwind: "$scenario" },
+					{
+						$lookup: {
+							from: "step",
+							localField: "scenario.cid",
+							foreignField: "aid",
+							as: "step"
+						}
+					},
+					{ $unwind: "$step" },
+					{
+						$group: {
+							_id: "$step.aid",
+							rid: { $push: "$_id" },
+							sid: { $push: "$sid" },
+							abid: { $addToSet: "$scenario.abid" },
+							flag: { $push: "$scenario.flag" },
+							isSuccess: { $push: "$isSuccess" },
+							action: { $addToSet: "$step.action" },
+							actions: { $push: "$scenario.actions" }
+						}
+					},
+					{ $unwind: "$action" },
+					{ $unwind: "$abid" }
+				], function (err, result) {
+					resolve(result);
+					db.close();
+				});
+
+
+
+			}).catch(err => {
+				winston.info(err);
 			});
 
+	})
+}
 
 
-		}).catch(err => {
-			winston.info(err);
-		});
+function read_end_run(dbUrl, runList) {
+	winston.info(`Read run result in ${dbUrl}`);
+
+	var objectIdList = [];
+	for (var i = 0; i < runList.length; i++) {
+		var id = new ObjectID(runList[i].sid);
+		objectIdList.push(id);
+	}
+
+	return new Promise((resolve, reject) => {
+
+
+		MongoClient.connect(dbUrl)
+			.then(db => {
+				db.collection('run').aggregate([
+					{
+						$match: {
+							'sid':
+							{
+								$in: objectIdList
+							}
+						}
+					},
+					{
+						$lookup: {
+							from: "scenario",
+							localField: "sid",
+							foreignField: "_id",
+							as: "scenario"
+						}
+					},
+
+					{ $unwind: "$scenario" },
+
+					{
+						$lookup: {
+							from: "step",
+							localField: "scenario.cid",
+							foreignField: "aid",
+							as: "step"
+						}
+					},
+
+					{ $unwind: "$step" },
+
+					{
+						$group: {
+							_id: "$step.aid",
+							rid: { $push: "$_id" },
+							sid: { $push: "$sid" },
+							flag: { $push: "$scenario.flag" },
+							abid: { $addToSet: "$scenario.abid" },
+							isSuccess: { $push: "$isSuccess" },
+							action: { $push: "$step.action" },
+							actions: { $push: "$scenario.actions" }
+						}
+					},
+
+					{ $unwind: "$action" },
+					{ $unwind: "$abid" },
+					{ $unwind: "$isSuccess" },
+					{ $unwind: "$flag" },
+					{ $unwind: "$rid" },
+					{ $unwind: "$sid" }
+				], function (err, result) {
+					resolve(result);
+					db.close();
+				});
+
+
+
+			}).catch(err => {
+				winston.info(err);
+			});
 
 	})
 }
@@ -598,7 +748,9 @@ module.exports.write_noise_scenario = write_noise_scenario;
 module.exports.write_candidate_action = write_candidate_action;
 module.exports.write_final_action = write_final_action;
 module.exports.write_TI_step = write_TI_step;
+module.exports.write_END_step = write_END_step;
 module.exports.read_candidate_collection = read_candidate_collection;
 module.exports.read_result_collection = read_result_collection;
 module.exports.read_run_collection = read_run_collection;
+module.exports.read_end_run = read_end_run;
 module.exports.init_step = init_step;

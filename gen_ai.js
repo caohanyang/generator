@@ -182,11 +182,10 @@ function gen_random_scenario(baseLength, loopNum) {
 		} else {
 			return callPlayer.waitAllRuns(dbUrl, end_id_list);
 		}
-	}).then(() => {
+	}).then((runEND) => {
 		console.log("===========step 3.10 loop "+loopNum+"===================");
-		console.log("update all runs results");
-		updator.update_step(dbUrl, sid_one_loop);
-		// console.log(data);
+		console.log("update all END runs results");
+		updator.update_END_step(dbUrl, runEND);
 	})
 }
 
