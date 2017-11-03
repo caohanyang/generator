@@ -172,7 +172,7 @@ function write_TI_step(dbUrl, result) {
 
 						// create new action item
 						var finalItem = {};
-						finalItem.aid = result.aid;
+						finalItem.aid = result._id;
 						finalItem.action = result.action;
 
 						var newOne = null;
@@ -180,29 +180,29 @@ function write_TI_step(dbUrl, result) {
 							case "FPCA": newOne = {
 								$set: finalItem,
 								$inc: { "FPCA": 1, "TPCA_OUT": 0, "TPCA_IN_TS": 0, "TPCA_IN_TF": 0 },
-								$push: { "cid": result._id, "FPCA_Scenario": result.EndScenario }
+								// $push: { "cid": result._id, "FPCA_Scenario": result.EndScenario }
 							}; break;
 							case "TPCA_OUT": newOne = {
 								$set: finalItem,
 								$inc: { "FPCA": 0, "TPCA_OUT": 1, "TPCA_IN_TS": 0, "TPCA_IN_TF": 0 },
-								$push: { "cid": result._id, "TPCA_OUT_Scenario": result.EndScenario }
+								// $push: { "cid": result._id, "TPCA_OUT_Scenario": result.EndScenario }
 							}; break;
 							case "TPCA_IN_TS": newOne = {
 								$set: finalItem,
 								$inc: { "FPCA": 0, "TPCA_OUT": 0, "TPCA_IN_TS": 1, "TPCA_IN_TF": 0 },
-								$push: { "cid": result._id, "TPCA_IN_TS_Scenario": result.EndScenario }
+								// $push: { "cid": result._id, "TPCA_IN_TS_Scenario": result.EndScenario }
 							}; break;
 							case "TPCA_IN_TF": newOne = {
 								$set: finalItem,
 								$inc: { "FPCA": 0, "TPCA_OUT": 0, "TPCA_IN_TS": 0, "TPCA_IN_TF": 1 },
-								$push: { "cid": result._id, "TPCA_IN_TF_Scenario": result.EndScenario }
+								// $push: { "cid": result._id, "TPCA_IN_TF_Scenario": result.EndScenario }
 							}; break;
 						}
 
 						// console.log(newOne);
 						// use findOneAndReplace to save unique action in action
 						finalCollection.findOneAndReplace(
-							{ 'aid': result.aid },
+							{ 'aid': result._id },
 							newOne,
 							{ upsert: true })
 							.then((actionOne) => {

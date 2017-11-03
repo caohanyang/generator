@@ -69,32 +69,49 @@ function getENDScenarios(dbUrl, scenario_str, runList, randomLocation) {
     
     return database.read_run_collection(dbUrl, runList).then((TIruns) => {
 
-        console.log(TIruns);
-        // 1. update step part 1: TFIO
-        updator.update_TFIO_step(dbUrl, TIruns);
-
-        // 2. generate end scenario
-        var sidList = [];
-        var endList = findEndActions(TIruns);
-        if (endList.length !== 0) {
-            console.log("------end list-----------")
-            console.log(endList);
+        return new Promise((resolve, reject) => {
+            console.log(TIruns);
+            // 1. update step part 1: TFIO
+            var firstPromise = updator.update_TFIO_step(dbUrl, TIruns);
+    
+            // 2. generate end scenario
+            var secondPromise = gen_end_scenario(dbUrl, scenario_str, TIruns)
             
-            
-            return new Promise((resolve, reject)=>{
-                gen_END(dbUrl, scenario_str, endList).then((sid)=>{
-                    sidList.push(sid);
-                    resolve(sidList);
-                });
-            })
-            
-        } else {
-            // endList is []
-            return endList;
-        }
-        // 2. update step
+            Promise.all([firstPromise, secondPromise]).then((value)=>{
+                console.log("complete update TFIO and end scenarios");
+    
+                // sidList is the return value of the secondPromise
+                console.log(value);
+                var sidList = value[1];
+                console.log(sidList);
+                resolve(sidList);
+            });
+        })
+        
     });
 
+}
+
+
+function gen_end_scenario (dbUrl, scenario_str, TIruns) {
+    var sidList = [];
+    var endList = findEndActions(TIruns);
+    if (endList.length !== 0) {
+        console.log("------end list-----------")
+        console.log(endList);
+        
+        
+        return new Promise((resolve, reject)=>{
+            gen_END(dbUrl, scenario_str, endList).then((sid)=>{
+                sidList.push(sid);
+                resolve(sidList);
+            });
+        })
+        
+    } else {
+        // endList is []
+        return endList;
+    }
 }
 
 function findEndActions(TIruns) {

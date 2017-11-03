@@ -7,12 +7,11 @@ var fs = require('fs');
 const argv = require('yargs').argv;
 var database = require('./database.js');
 var asyncLoop = require('node-async-loop');
-
+const Promise = require('bluebird');
 
 function update_TFIO_step(dbUrl, TIruns) {
-    
 	
-
+	return new Promise(function (resolve, reject) {
 	var step_num = 0;
 
 	return synchronousLoop(function () {
@@ -25,7 +24,10 @@ function update_TFIO_step(dbUrl, TIruns) {
 				setTimeout(function () {
 
 					// Print out the sum thus far to show progress
-					var final = gen_bugType_TI(TIruns[i]);
+					var final = gen_bugType_TI(TIruns[step_num]);
+
+					console.log("-------final TF IO----------");
+					console.log(final);
 
 					if (final.type !== null) {
 						database.write_TI_step(dbUrl, final);
@@ -35,7 +37,12 @@ function update_TFIO_step(dbUrl, TIruns) {
 					resolve();
 				}, 100);
 			});
-		});
+		}).then(()=>{
+			resolve("finish save TFIO steps");
+		})
+
+	
+	})
 
 }
 
@@ -44,13 +51,13 @@ function gen_bugType_TI(result) {
 	var TF, IO;
 
 	switch (result.flag[0]) {
-		case "TF": TF = result.result[0]; break;
-		case "IO": IO = result.result[0]; break;
+		case "TF": TF = result.isSuccess[0]; break;
+		case "IO": IO = result.isSuccess[0]; break;
 	}
 
 	switch (result.flag[1]) {
-		case "TF": TF = result.result[1]; break;
-		case "IO": IO = result.result[1]; break;
+		case "TF": TF = result.isSuccess[1]; break;
+		case "IO": IO = result.isSuccess[1]; break;
 	}
 
 	var type = null;
@@ -62,6 +69,7 @@ function gen_bugType_TI(result) {
 			type = "TPCA_OUT"
 		}
 	}
+
 	result.type = type;
 
 	return result;
@@ -85,4 +93,4 @@ function synchronousLoop(condition, action) {
 
 
 module.exports.gen_bugType_TI = gen_bugType_TI;
-module.exports.update_step = update_step;
+module.exports.update_TFIO_step = update_TFIO_step;
