@@ -20,7 +20,7 @@ var safeStart = 6
 var baseDelay = 1000;
 var candidateDelay = 10000;
 var scenarioDelay = 30000;
-var loopMax = 2;
+var loopMax = 3;
 
 const serverNames = {
 	mongoServerName: argv.mongo
@@ -46,22 +46,22 @@ database.write_base_scenario(dbUrl, scenario_base, (baseId) => {
 
 		candidateDelay = baseLength * 1000;
 
-		// return synchronousLoop(function () {
-		// 	// Condition for stopping
-		// 	return can_num < baseLength - 1;
-		// }, function () {
-		// 	// The function to run, should return a promise
-		// 	return new Promise(function (resolve, reject) {
-		// 		// Arbitrary 250ms async method to simulate async process
-		// 		setTimeout(function () {
-		// 			can_num++;
-		// 			// Print out the sum thus far to show progress
-		// 			gen_candi_actions(baseId, can_num)
+		return synchronousLoop(function () {
+			// Condition for stopping
+			return can_num < baseLength - 1;
+		}, function () {
+			// The function to run, should return a promise
+			return new Promise(function (resolve, reject) {
+				// Arbitrary 250ms async method to simulate async process
+				setTimeout(function () {
+					can_num++;
+					// Print out the sum thus far to show progress
+					gen_candi_actions(baseId, can_num)
 
-		// 			resolve();
-		// 		}, candidateDelay);
-		// 	});
-		// });
+					resolve();
+				}, candidateDelay);
+			});
+		});
 
 	}).then((scenario_base)=> {
 		console.log("===========step 3 LOOP===================");
@@ -93,7 +93,6 @@ database.write_base_scenario(dbUrl, scenario_base, (baseId) => {
 	})
 	
 });
-
 
 
 
@@ -133,12 +132,14 @@ function gen_random_scenario(baseLength, loopNum) {
 
 	}).then(() => {
 		console.log("===========step 3.3 loop "+loopNum+"===================");
-		console.log("generate probability for each actions");
+		console.log("update probability for each actions");
 		if (loopNum === 0) {
-		    database.init_step(dbUrl);
-		} 
-		return calculator.calculatePro(dbUrl);
-		
+		    return database.init_step(dbUrl).then(()=>{
+				return calculator.calculatePro(dbUrl)
+			});
+		} else {
+			return calculator.calculatePro(dbUrl);
+		}	
 		
 	}).then((pList)=>{
 		console.log("===========step 3.4 loop "+loopNum+"===================");
@@ -186,6 +187,9 @@ function gen_random_scenario(baseLength, loopNum) {
 		console.log("===========step 3.10 loop "+loopNum+"===================");
 		console.log("update all END runs results");
 		updator.update_END_step(dbUrl, runEND);
+	}).then(()=>{
+		console.log("===========step 3.11 loop "+loopNum+"===================");
+		console.log("finish the step " + loopNum);
 	})
 }
 

@@ -21,21 +21,63 @@ function calculatePro(dbUrl) {
                         winston.error(err);
                         db.close();
                     } else {
-
                         stepCollection.find().toArray()
                             .then(stepArray => {
 
                                 var N = stepArray.length;
+           
+                                var promiseList = [];
                                 var pList = [];
-                                for (var s = 0; s < stepArray.length; s++) {
+                                var pSum = 0;
+
+                                console.log("N "+ N);
+                                //1.refresh all p 
+                                
+                                for (let s = 0; s < stepArray.length; s++) {
 
                                     var p = calculate(stepArray[s], N);
+                                    console.log("p "+ p);                           
+                                    pSum = pSum + p;
                                     stepArray[s].probability = p;
-                                    pList.push(stepArray[s]);
                                 }
 
+                                console.log("Psum: " + pSum);
+
+                                //2.uniformization
+                                for (let m = 0; m < stepArray.length; m++) {
+
+                                   // save stepItem in the step table
+                                    // var stepItem = {};
+                                    // stepItem.probability = stepArray[m].probability;
+                                    // stepItem.sumPro = pSum;
+                                    // stepItem.uniformPro = stepArray[m].probability / pSum;
+                         
+                                    // return pList to next step
+                                   stepArray[m].sumPro = pSum;
+                                   stepArray[m].uniformPro = stepArray[m].probability / pSum;
+                                   pList.push(stepArray[m]);
+
+                                   console.log(stepArray[m]);
+                                    promiseList.push(
+                                        stepCollection.findOneAndReplace(
+                                            { 'aid': stepArray[m].aid },
+                                            {
+                                                $set: stepArray[m]
+                                             },
+                                            { upsert: true })
+                                    );
+
+                                }
+
+
+                                Promise.all(promiseList).then(() => {
+                                    console.log("update all step probabilities");
+                                    db.close();
+                                    resolve();
+                                })
+
+
                                 resolve(pList);
-                                db.close();
                             }).catch(err => {
                                 winston.info(err);
                                 db.close();
@@ -66,20 +108,20 @@ function getNextScenarios(dbUrl, scenario_str, runList, randomLocation, flag) {
 
 function getENDScenarios(dbUrl, scenario_str, runList, randomLocation) {
 
-    
+
     return database.read_run_collection(dbUrl, runList).then((TIruns) => {
 
         return new Promise((resolve, reject) => {
             console.log(TIruns);
             // 1. update step part 1: TFIO
             var firstPromise = updator.update_TFIO_step(dbUrl, TIruns);
-    
+
             // 2. generate end scenario
             var secondPromise = gen_end_scenario(dbUrl, scenario_str, TIruns)
-            
-            Promise.all([firstPromise, secondPromise]).then((value)=>{
+
+            Promise.all([firstPromise, secondPromise]).then((value) => {
                 console.log("complete update TFIO and end scenarios");
-    
+
                 // sidList is the return value of the secondPromise
                 console.log(value);
                 var sidList = value[1];
@@ -87,27 +129,27 @@ function getENDScenarios(dbUrl, scenario_str, runList, randomLocation) {
                 resolve(sidList);
             });
         })
-        
+
     });
 
 }
 
 
-function gen_end_scenario (dbUrl, scenario_str, TIruns) {
+function gen_end_scenario(dbUrl, scenario_str, TIruns) {
     var sidList = [];
     var endList = findEndActions(TIruns);
     if (endList.length !== 0) {
         console.log("------end list-----------")
         console.log(endList);
-        
-        
-        return new Promise((resolve, reject)=>{
-            gen_END(dbUrl, scenario_str, endList).then((sid)=>{
+
+
+        return new Promise((resolve, reject) => {
+            gen_END(dbUrl, scenario_str, endList).then((sid) => {
                 sidList.push(sid);
                 resolve(sidList);
             });
         })
-        
+
     } else {
         // endList is []
         return endList;
@@ -132,7 +174,7 @@ function findEndActions(TIruns) {
         }
 
         // if (gotoEnd) {
-            endList.push(run);
+        endList.push(run);
         // }
     }
 
@@ -242,18 +284,18 @@ function gen_IO(dbUrl, scenario_str, action, abid, aid) {
 }
 
 function gen_END(dbUrl, scenario_str, endList) {
-    
+
     var abidList = [];
     var aidList = [];
-    for (let i = 0; i < endList.length; i++){
+    for (let i = 0; i < endList.length; i++) {
         abidList.push(endList[i].abid);
         aidList.push(endList[i]._id);
     }
 
     // sort the abidList
-    abidList.sort(function(a, b) {
+    abidList.sort(function (a, b) {
         return a - b;
-      });
+    });
 
     // specify add locations
     console.log(abidList);

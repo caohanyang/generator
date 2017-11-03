@@ -26,8 +26,8 @@ function update_TFIO_step(dbUrl, TIruns) {
 					// Print out the sum thus far to show progress
 					var final = gen_bugType_TI(TIruns[step_num]);
 
-					console.log("-------final TF IO----------");
-					console.log(final);
+					// console.log("-------final TF IO----------");
+					// console.log(final);
 
 					if (final.type !== null) {
 						database.write_TI_step(dbUrl, final);
@@ -65,8 +65,8 @@ function update_END_step(dbUrl, runEND) {
 							// Print out the sum thus far to show progress
 							var final = gen_bugType_END(endCombine[step_num]);
 		
-							console.log("-------final end----------");
-							console.log(final);
+							// console.log("-------final end----------");
+							// console.log(final);
 		
 							if (final.type !== null) {
 								database.write_END_step(dbUrl, final);
